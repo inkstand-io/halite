@@ -312,7 +312,7 @@
       <appliedProfile href="pathmap://XSD_PROFILES/XSDProfile.epx#_w1-ykSkOEdmj4ajjgbmSxQ?XSDProfile?"/>
     </profileApplication>
   </uml:Model>
-  <XSDProfile:schema xmi:id="_iEwbwFO2EeSwNJVJWC805A" base_Package="_fiwZEFO2EeSwNJVJWC805A" targetNamespace="https://github.com/GuildOfTinkerers/halite/" targetNamespacePrefix="hlt" version="1"/>
+  <XSDProfile:schema xmi:id="_iEwbwFO2EeSwNJVJWC805A" base_Package="_fiwZEFO2EeSwNJVJWC805A" targetNamespace="http://model.halite.org" targetNamespacePrefix="hlt" version="1"/>
   <XSDProfile:enumeration xmi:id="_zKL2MFO3EeSwNJVJWC805A" base_Class="_zGFZUFO3EeSwNJVJWC805A"/>
   <XSDProfile:attribute xmi:id="_aUdn4FO5EeSwNJVJWC805A" base_Property="_e53iMFO4EeSwNJVJWC805A" use="required"/>
   <XSDProfile:attribute xmi:id="_aUeO8FO5EeSwNJVJWC805A" base_Property="_flG3kFO4EeSwNJVJWC805A"/>

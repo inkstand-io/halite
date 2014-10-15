@@ -25,5 +25,11 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<resources>
+			<!-- regular resource processsing for everything except logback.xml -->
+			<resource>
+				<directory>src/main/xsd</directory>
+			</resource>
+		</resources>
 	</build>
 </project>
