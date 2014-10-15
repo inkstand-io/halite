@@ -1,26 +1,29 @@
 package org.halite;
 
 import org.halite.model.Link;
+import org.halite.model.ObjectFactory;
 import org.halite.model.Resource;
 
 /**
- * A link builder to conveniently create links. If the link builder was created using a resource, it is already added to
- * the resource, therefore the addTo method does not have to be invoked. If the link was created without a specific
- * resource, if have to be added.
+ * A link adapter to conveniently manipulate links. If the link adapter was created using a resource, it is already
+ * added to the resource, therefore the addTo method does not have to be invoked. If the link was created without a
+ * specific resource, if have to be added.
  * 
  * @author gmuecke
  * 
  */
-public class LinkBuilder {
+public class LinkAdapter {
+
+    private static final ObjectFactory factory = new ObjectFactory();
 
     private final Link link;
 
-    LinkBuilder() {
-        this.link = new Link();
+    LinkAdapter() {
+        this.link = factory.createLink();
     }
 
-    LinkBuilder(final Resource resource) {
-        this.link = new Link();
+    LinkAdapter(final Resource resource) {
+        this();
         addTo(resource);
     }
 
@@ -31,7 +34,7 @@ public class LinkBuilder {
      *            the value of the rel attribute
      * @return the link builder itself
      */
-    public LinkBuilder rel(final String rel) {
+    public LinkAdapter rel(final String rel) {
         link.setRel(rel);
         return this;
     }
@@ -43,7 +46,7 @@ public class LinkBuilder {
      *            the value of the href attribute
      * @return the link builder itself
      */
-    public LinkBuilder href(final String href) {
+    public LinkAdapter href(final String href) {
         link.setHref(href);
         return this;
     }
@@ -55,7 +58,7 @@ public class LinkBuilder {
      *            the value of the hreflang attribute
      * @return the link builder itself
      */
-    public LinkBuilder hreflang(final String hreflang) {
+    public LinkAdapter hreflang(final String hreflang) {
         link.setHreflang(hreflang);
         return this;
     }
@@ -67,7 +70,7 @@ public class LinkBuilder {
      *            the value of the profile attribute
      * @return the link builder itself
      */
-    public LinkBuilder profile(final String profile) {
+    public LinkAdapter profile(final String profile) {
         link.setProfile(profile);
         return this;
     }
@@ -79,7 +82,7 @@ public class LinkBuilder {
      *            the value of the deprecation attribute
      * @return the link builder itself
      */
-    public LinkBuilder deprecation(final String deprecation) {
+    public LinkAdapter deprecation(final String deprecation) {
         link.setDeprecation(deprecation);
         return this;
     }
@@ -91,7 +94,7 @@ public class LinkBuilder {
      *            the value of the profile attribute
      * @return the link builder itself
      */
-    public LinkBuilder name(final String name) {
+    public LinkAdapter name(final String name) {
         link.setName(name);
         return this;
     }
@@ -103,7 +106,7 @@ public class LinkBuilder {
      *            the value of the templated attribute
      * @return the link builder itself
      */
-    public LinkBuilder templated(final Boolean templated) {
+    public LinkAdapter templated(final Boolean templated) {
         link.setTemplated(templated);
         return this;
     }
@@ -115,7 +118,7 @@ public class LinkBuilder {
      *            the value of the type attribute
      * @return the link builder itself
      */
-    public LinkBuilder type(final String type) {
+    public LinkAdapter type(final String type) {
         link.setType(type);
         return this;
     }
@@ -127,7 +130,7 @@ public class LinkBuilder {
      *            the value of the title attribute
      * @return the link builder itself
      */
-    public LinkBuilder title(final String title) {
+    public LinkAdapter title(final String title) {
         link.setTitle(title);
         return this;
     }
