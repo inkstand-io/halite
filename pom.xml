@@ -142,5 +142,7 @@
 	<modules>
 		<module>halite-model</module>
 		<module>halite-core</module>
+		<module>halite-json</module>
+		<module>halite-xml</module>
 	</modules>
 </project>
