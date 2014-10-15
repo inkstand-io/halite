@@ -13,6 +13,7 @@
 		<slf4j.version>1.7.6</slf4j.version>
 		<log4j.version>2.0-rc1</log4j.version>
 		<!-- Sonar and Code Coverage -->
+		<coverage.unit.test.path>${project.basedir}/../target/jacoco.exec</coverage.unit.test.path>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.jacoco.reportPath>${coverage.unit.test.path}</sonar.jacoco.reportPath>
