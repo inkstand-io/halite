@@ -80,6 +80,11 @@ public class ResourceAdapterTest {
         assertTrue(links.get("rel2").contains(l3));
     }
 
+    @Test(expected = AssertionError.class)
+    public void testGetLinksString_relIsNull() throws Exception {
+        subject.getLinks(null);
+    }
+
     @Test
     public void testGetLinksString() throws Exception {
         // prepare
@@ -137,6 +142,16 @@ public class ResourceAdapterTest {
     @Test
     public void testGetLink_nonexistingLink() throws Exception {
         assertNull(subject.getLink("n/a", "n/a"));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testGetLink_relIsNull() throws Exception {
+        subject.getLink(null, "n/a");
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testGetLink_nameIsNull() throws Exception {
+        subject.getLink("n/a", null);
     }
 
     @Test

@@ -14,12 +14,12 @@ import org.halite.model.Resource;
  */
 public class LinkAdapter {
 
-    private static final ObjectFactory factory = new ObjectFactory();
+    private static final ObjectFactory FACTORY = new ObjectFactory();
 
     private final Link link;
 
     LinkAdapter() {
-        this.link = factory.createLink();
+        this.link = FACTORY.createLink();
     }
 
     LinkAdapter(final Resource resource) {

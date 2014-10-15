@@ -18,7 +18,7 @@ import org.halite.model.Resource;
  */
 public class ResourceAdapter {
 
-    private static final ObjectFactory factory = new ObjectFactory();
+    private static final ObjectFactory FACTORY = new ObjectFactory();
 
     private final Resource resource;
 
@@ -27,7 +27,7 @@ public class ResourceAdapter {
     }
 
     ResourceAdapter() {
-        resource = factory.createResource();
+        resource = FACTORY.createResource();
     }
 
     /**
