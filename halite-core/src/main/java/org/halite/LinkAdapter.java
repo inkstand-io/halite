@@ -142,9 +142,9 @@ public class LinkAdapter {
      *            the resource to which the link should be added
      * @return the link that was added
      */
-    public Link addTo(final Resource resource) {
+    public LinkAdapter addTo(final Resource resource) {
         resource.getLink().add(this.link);
-        return link;
+        return this;
     }
 
     /**
