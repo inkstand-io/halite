@@ -77,7 +77,7 @@ public class ResourceAdapter {
      * @return a list of all links with the same relation
      */
     public List<Link> getLinks(final String rel) {
-        assert rel == null : "rel must not be null";
+        assert rel != null : "rel must not be null";
 
         final List<Link> links = new ArrayList<>();
         for (final Link link : resource.getLink()) {
@@ -98,8 +98,8 @@ public class ResourceAdapter {
      * @return the link or <code>null</code> if no link was found
      */
     public Link getLink(final String rel, final String name) {
-        assert name == null : "name must not be null";
-        assert rel == null : "rel must not be null";
+        assert name != null : "name must not be null";
+        assert rel != null : "rel must not be null";
 
         for (final Link link : resource.getLink()) {
             if (rel.equals(link.getRel()) && name.equals(link.getName())) {
