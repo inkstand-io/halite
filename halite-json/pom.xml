@@ -31,5 +31,10 @@
 			<artifactId>halite-model</artifactId>
 			<version>${halite.model.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>gt</groupId>
+			<artifactId>halite-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>
