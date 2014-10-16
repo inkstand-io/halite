@@ -40,6 +40,7 @@ public class ResourceAdapter {
      * @return the resource into which the other resource have been embedded
      */
     public ResourceAdapter embed(final Resource... embedded) {
+        // TODO check if non-resource should be embeddable as well
         this.resource.getEmbedded().addAll(Arrays.asList(embedded));
         return this;
     }

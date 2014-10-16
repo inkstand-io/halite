@@ -5,7 +5,9 @@
 	<artifactId>halite</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Halite</name>
-	<description>Implementation of the HAL specification</description>
+	<description>A lightweight API of the HAL specification that provides base types for JAXB generated classes and convenience methods to add links or embedd resources.
+
+The JSon support allows create spec conform json output from the JAXB based datatypes and a Jax-RS provider to write message bodies.</description>
 	<packaging>pom</packaging>
 
 	<properties>
