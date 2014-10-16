@@ -87,7 +87,9 @@ public class LinkAdapterTest {
     @Test
     public void testAddTo() throws Exception {
         final Resource resource = new Resource();
-        subject.addTo(resource);
+        final LinkAdapter la = subject.addTo(resource);
+        assertNotNull(la);
+        assertEquals(la, subject);
         assertTrue(resource.getLink().contains(subject.getLink()));
     }
 
