@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>li.moskito</groupId>
 		<artifactId>halite</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.1</version>
 	</parent>
 	<artifactId>halite-json</artifactId>
 	<name>halite-json</name>
@@ -14,7 +13,7 @@
 	<properties>
 		<javax.javaee.version>6.0</javax.javaee.version>
 		<javax.json.version>1.0.4</javax.json.version>
-		<halite.model.version>0.0.1-SNAPSHOT</halite.model.version>
+		<halite.model.version>0.0.1</halite.model.version>
 	</properties>
 
 	<dependencies>
@@ -36,7 +35,7 @@
 		<dependency>
 			<groupId>li.moskito</groupId>
 			<artifactId>halite-core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 </project>
