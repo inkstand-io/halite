@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.halite</groupId>
-		<artifactId>org.halite</artifactId>
+		<groupId>li.moskito</groupId>
+		<artifactId>halite</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>halite-json</artifactId>
@@ -20,26 +20,21 @@
 	<dependencies>
 		<!-- TODO as javax.json has become part of JEE7, provide a profile for JEE7 that adds a JEE7 dependency instead -->
 
-<!-- 
+		<!-- <dependency> <groupId>org.glassfish</groupId> <artifactId>javax.json</artifactId> <version>${javax.json.version}</version> 
+			</dependency> -->
 		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.json</artifactId>
-			<version>${javax.json.version}</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.4.3</version>
 		</dependency>
-		-->
+
 		<dependency>
-	<groupId>com.fasterxml.jackson.core</groupId>
-	<artifactId>jackson-databind</artifactId>
-	<version>2.4.3</version>
-</dependency>
-		
-		<dependency>
-			<groupId>gt</groupId>
+			<groupId>li.moskito</groupId>
 			<artifactId>halite-model</artifactId>
 			<version>${halite.model.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>gt</groupId>
+			<groupId>li.moskito</groupId>
 			<artifactId>halite-core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

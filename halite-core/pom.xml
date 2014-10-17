@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.halite</groupId>
-    <artifactId>org.halite</artifactId>
+    <groupId>li.moskito</groupId>
+    <artifactId>halite</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>halite-core</artifactId>
@@ -10,7 +10,7 @@
   <description>Implementation of the HAL specification</description>
   <dependencies>
   	<dependency>
-  		<groupId>gt</groupId>
+  		<groupId>li.moskito</groupId>
   		<artifactId>halite-model</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
