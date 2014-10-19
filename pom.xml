@@ -92,10 +92,10 @@ The JSon support allows create spec conform json output from the JAXB based data
 				<version>1.0-m4.3</version>
 				<configuration>
 					<!-- Enable this to push to origin using SSH keys -->
-					<enableSshAgent>true</enableSshAgent>
+					<enableSshAgent>false</enableSshAgent>
 					<!-- Keep your maven submodules at the same version as the parent POM -->
 					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<!-- Pusing in-development features to origin allows all devs to see what each other are working on -->
+					<!-- Pushing in-development features to origin allows all devs to see what each other are working on -->
 					<pushFeatures>true</pushFeatures>
 					<!-- This allows the CI server (e.g. Jenkins) to automatically push new releases to origin; you can then either manually 
 						deploy them or, if you are doing Continuous Deployments, auto-deploy them to prod -->
