@@ -1,9 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>li.moskito</groupId>
 	<artifactId>halite</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<name>Halite</name>
 	<description>A lightweight API of the HAL specification that provides base types for JAXB generated classes and convenience methods to add links or embedd resources.
 
@@ -93,10 +92,10 @@ The JSon support allows create spec conform json output from the JAXB based data
 				<version>1.0-m4.3</version>
 				<configuration>
 					<!-- Enable this to push to origin using SSH keys -->
-					<enableSshAgent>true</enableSshAgent>
+					<enableSshAgent>false</enableSshAgent>
 					<!-- Keep your maven submodules at the same version as the parent POM -->
 					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<!-- Pusing in-development features to origin allows all devs to see what each other are working on -->
+					<!-- Pushing in-development features to origin allows all devs to see what each other are working on -->
 					<pushFeatures>true</pushFeatures>
 					<!-- This allows the CI server (e.g. Jenkins) to automatically push new releases to origin; you can then either manually 
 						deploy them or, if you are doing Continuous Deployments, auto-deploy them to prod -->
