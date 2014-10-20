@@ -9,23 +9,23 @@ import org.halite.model.Resource;
 import org.junit.Before;
 import org.junit.Test;
 
-public class LinkAdapterTest {
+public class LinkBuilderTest {
 
-    private LinkAdapter subject;
+    private LinkBuilder subject;
 
     @Before
     public void setUp() throws Exception {
-        this.subject = new LinkAdapter();
+        this.subject = new LinkBuilder();
 
     }
 
     @Test
     public void testLinkAdapterResource() throws Exception {
         final Resource resource = new Resource();
-        final LinkAdapter linkAdapter = new LinkAdapter(resource);
+        final LinkBuilder linkBuilder = new LinkBuilder(resource);
 
-        assertNotNull(linkAdapter.getLink());
-        assertTrue(resource.getLink().contains(linkAdapter.getLink()));
+        assertNotNull(linkBuilder.getLink());
+        assertTrue(resource.getLink().contains(linkBuilder.getLink()));
     }
 
     @Test
@@ -87,7 +87,7 @@ public class LinkAdapterTest {
     @Test
     public void testAddTo() throws Exception {
         final Resource resource = new Resource();
-        final LinkAdapter la = subject.addTo(resource);
+        final LinkBuilder la = subject.addTo(resource);
         assertNotNull(la);
         assertEquals(la, subject);
         assertTrue(resource.getLink().contains(subject.getLink()));

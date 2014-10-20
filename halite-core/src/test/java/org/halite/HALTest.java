@@ -16,7 +16,7 @@ public class HALTest {
 
     @Test
     public void testNewLinkStringString() throws Exception {
-        final LinkAdapter la = HAL.newLink("rel1", "href1");
+        final LinkBuilder la = HAL.newLink("rel1", "href1");
         assertNotNull(la);
         assertEquals("rel1", la.getLink().getRel());
         assertEquals("href1", la.getLink().getHref());
@@ -39,7 +39,7 @@ public class HALTest {
     @Test
     public void testNewLinkResource() throws Exception {
         final Resource resource = new Resource();
-        final LinkAdapter la = HAL.newLink(resource);
+        final LinkBuilder la = HAL.newLink(resource);
         assertNotNull(la);
         assertTrue(resource.getLink().contains(la.getLink()));
     }
@@ -47,7 +47,7 @@ public class HALTest {
     @Test
     public void testNewLinkResourceStringString() throws Exception {
         final Resource resource = new Resource();
-        final LinkAdapter la = HAL.newLink(resource, "rel1", "href1");
+        final LinkBuilder la = HAL.newLink(resource, "rel1", "href1");
         assertNotNull(la);
         assertTrue(resource.getLink().contains(la.getLink()));
         assertEquals("rel1", la.getLink().getRel());

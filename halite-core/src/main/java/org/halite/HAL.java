@@ -38,8 +38,8 @@ public final class HAL {
      * 
      * @return a link adapter
      */
-    public static LinkAdapter newLink() {
-        return new LinkAdapter();
+    public static LinkBuilder newLink() {
+        return new LinkBuilder();
     }
 
     /**
@@ -49,8 +49,8 @@ public final class HAL {
      *            the resource to which the created link is added
      * @return the link adapter for the added link
      */
-    public static LinkAdapter newLink(final Resource resource) {
-        return new LinkAdapter(resource);
+    public static LinkBuilder newLink(final Resource resource) {
+        return new LinkBuilder(resource);
     }
 
     /**
@@ -63,8 +63,8 @@ public final class HAL {
      *            the hyper-reference, the target, of the link
      * @return a link adapter
      */
-    public static LinkAdapter newLink(final String rel, final String href) {
-        return new LinkAdapter().rel(rel).href(href);
+    public static LinkBuilder newLink(final String rel, final String href) {
+        return new LinkBuilder().rel(rel).href(href);
     }
 
     /**
@@ -79,8 +79,8 @@ public final class HAL {
      *            the hyper-reference, the target, of the link
      * @return a link adapter
      */
-    public static LinkAdapter newLink(final Resource resource, final String rel, final String href) {
-        return new LinkAdapter(resource).rel(rel).href(href);
+    public static LinkBuilder newLink(final Resource resource, final String rel, final String href) {
+        return new LinkBuilder(resource).rel(rel).href(href);
     }
 
     /**

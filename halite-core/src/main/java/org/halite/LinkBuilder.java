@@ -5,24 +5,24 @@ import org.halite.model.ObjectFactory;
 import org.halite.model.Resource;
 
 /**
- * A link adapter to conveniently manipulate links. If the link adapter was created using a resource, it is already
- * added to the resource, therefore the addTo method does not have to be invoked. If the link was created without a
- * specific resource, if have to be added.
+ * A link builder to conveniently manipulate links. If the link builder was created using a resource, the to be built
+ * link it is already added to the resource, therefore the addTo method does not have to be invoked. If the link was
+ * created without a specific resource, it have to be added.
  * 
  * @author gmuecke
  * 
  */
-public class LinkAdapter {
+public class LinkBuilder {
 
     private static final ObjectFactory FACTORY = new ObjectFactory();
 
     private final Link link;
 
-    LinkAdapter() {
+    LinkBuilder() {
         this.link = FACTORY.createLink();
     }
 
-    LinkAdapter(final Resource resource) {
+    LinkBuilder(final Resource resource) {
         this();
         addTo(resource);
     }
@@ -34,7 +34,7 @@ public class LinkAdapter {
      *            the value of the rel attribute
      * @return the link builder itself
      */
-    public LinkAdapter rel(final String rel) {
+    public LinkBuilder rel(final String rel) {
         link.setRel(rel);
         return this;
     }
@@ -46,7 +46,7 @@ public class LinkAdapter {
      *            the value of the href attribute
      * @return the link builder itself
      */
-    public LinkAdapter href(final String href) {
+    public LinkBuilder href(final String href) {
         link.setHref(href);
         return this;
     }
@@ -58,7 +58,7 @@ public class LinkAdapter {
      *            the value of the hreflang attribute
      * @return the link builder itself
      */
-    public LinkAdapter hreflang(final String hreflang) {
+    public LinkBuilder hreflang(final String hreflang) {
         link.setHreflang(hreflang);
         return this;
     }
@@ -70,7 +70,7 @@ public class LinkAdapter {
      *            the value of the profile attribute
      * @return the link builder itself
      */
-    public LinkAdapter profile(final String profile) {
+    public LinkBuilder profile(final String profile) {
         link.setProfile(profile);
         return this;
     }
@@ -82,7 +82,7 @@ public class LinkAdapter {
      *            the value of the deprecation attribute
      * @return the link builder itself
      */
-    public LinkAdapter deprecation(final String deprecation) {
+    public LinkBuilder deprecation(final String deprecation) {
         link.setDeprecation(deprecation);
         return this;
     }
@@ -94,7 +94,7 @@ public class LinkAdapter {
      *            the value of the profile attribute
      * @return the link builder itself
      */
-    public LinkAdapter name(final String name) {
+    public LinkBuilder name(final String name) {
         link.setName(name);
         return this;
     }
@@ -106,7 +106,7 @@ public class LinkAdapter {
      *            the value of the templated attribute
      * @return the link builder itself
      */
-    public LinkAdapter templated(final Boolean templated) {
+    public LinkBuilder templated(final Boolean templated) {
         link.setTemplated(templated);
         return this;
     }
@@ -118,7 +118,7 @@ public class LinkAdapter {
      *            the value of the type attribute
      * @return the link builder itself
      */
-    public LinkAdapter type(final String type) {
+    public LinkBuilder type(final String type) {
         link.setType(type);
         return this;
     }
@@ -130,7 +130,7 @@ public class LinkAdapter {
      *            the value of the title attribute
      * @return the link builder itself
      */
-    public LinkAdapter title(final String title) {
+    public LinkBuilder title(final String title) {
         link.setTitle(title);
         return this;
     }
@@ -142,7 +142,7 @@ public class LinkAdapter {
      *            the resource to which the link should be added
      * @return the link that was added
      */
-    public LinkAdapter addTo(final Resource resource) {
+    public LinkBuilder addTo(final Resource resource) {
         resource.getLink().add(this.link);
         return this;
     }

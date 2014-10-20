@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.halite.LinkBuilder;
+import org.halite.ResourceAdapter;
 import org.halite.model.Link;
 import org.halite.model.Resource;
 import org.junit.Before;
@@ -156,13 +158,13 @@ public class ResourceAdapterTest {
 
     @Test
     public void testAddLink() throws Exception {
-        final LinkAdapter link = subject.addLink();
+        final LinkBuilder link = subject.addLink();
         assertNotNull(link);
     }
 
     @Test
     public void testAddLinkStringString() throws Exception {
-        final LinkAdapter link = subject.addLink("rel1", "href1");
+        final LinkBuilder link = subject.addLink("rel1", "href1");
         assertNotNull(link);
         assertEquals("rel1", link.getLink().getRel());
         assertEquals("href1", link.getLink().getHref());

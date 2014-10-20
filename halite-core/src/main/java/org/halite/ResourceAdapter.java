@@ -20,14 +20,14 @@ public class ResourceAdapter {
 
     private static final ObjectFactory FACTORY = new ObjectFactory();
 
-    private final Resource resource;
+    private final Resource adaptee;
 
     ResourceAdapter(final Resource resource) {
-        this.resource = resource;
+        this.adaptee = resource;
     }
 
     ResourceAdapter() {
-        resource = FACTORY.createResource();
+        adaptee = FACTORY.createResource();
     }
 
     /**
@@ -41,7 +41,7 @@ public class ResourceAdapter {
      */
     public ResourceAdapter embed(final Resource... embedded) {
         // TODO check if non-resource should be embeddable as well
-        this.resource.getEmbedded().addAll(Arrays.asList(embedded));
+        this.adaptee.getEmbedded().addAll(Arrays.asList(embedded));
         return this;
     }
 
@@ -50,7 +50,7 @@ public class ResourceAdapter {
      * @return the adaptee resource
      */
     public Resource getResource() {
-        return resource;
+        return adaptee;
     }
 
     /**
@@ -61,7 +61,7 @@ public class ResourceAdapter {
      */
     public Map<String, List<Link>> getLinks() {
         final Map<String, List<Link>> links = new HashMap<>();
-        for (final Link link : resource.getLink()) {
+        for (final Link link : adaptee.getLink()) {
             if (!links.containsKey(link.getRel())) {
                 links.put(link.getRel(), new ArrayList<Link>());
             }
@@ -81,7 +81,7 @@ public class ResourceAdapter {
         assert rel != null : "rel must not be null";
 
         final List<Link> links = new ArrayList<>();
-        for (final Link link : resource.getLink()) {
+        for (final Link link : adaptee.getLink()) {
             if (rel.equals(link.getRel())) {
                 links.add(link);
             }
@@ -102,7 +102,7 @@ public class ResourceAdapter {
         assert name != null : "name must not be null";
         assert rel != null : "rel must not be null";
 
-        for (final Link link : resource.getLink()) {
+        for (final Link link : adaptee.getLink()) {
             if (rel.equals(link.getRel()) && name.equals(link.getName())) {
                 return link;
             }
@@ -115,8 +115,8 @@ public class ResourceAdapter {
      * 
      * @return a LinkBuilder to set link specific attributes
      */
-    public LinkAdapter addLink() {
-        return new LinkAdapter(resource);
+    public LinkBuilder addLink() {
+        return new LinkBuilder(adaptee);
     }
 
     /**
@@ -130,8 +130,8 @@ public class ResourceAdapter {
      * @return a LinkBuilder to set link specific attributes
      * 
      */
-    public LinkAdapter addLink(final String rel, final String href) {
-        return new LinkAdapter(resource).rel(rel).href(href);
+    public LinkBuilder addLink(final String rel, final String href) {
+        return new LinkBuilder(adaptee).rel(rel).href(href);
     }
 
 }

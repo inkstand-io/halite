@@ -278,7 +278,9 @@ public class JsonHalWriter {
         if (Collection.class.isAssignableFrom(fieldType)) {
             json.writeArrayFieldStart(fieldName);
             for (final Object object : (Collection<?>) fieldValue) {
+                json.writeStartObject();
                 writeObject(object);
+                json.writeEndObject();
             }
             json.writeEndArray();
         } else if (Resource.class.isAssignableFrom(fieldType)) {
