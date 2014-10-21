@@ -162,12 +162,23 @@ public class JsonHalWriter {
      */
     public void write(final Object resource) throws IOException {
 
-        json.writeStartObject();
         writeObject(resource);
-        json.writeEndObject();
         if (getOption(Option.CLOSE_ON_WRITE_RESOURCE)) {
             json.close();
         }
+    }
+
+    private void writeObject(final Object resource) throws IOException, JsonGenerationException, JsonMappingException {
+        json.writeStartObject();
+        writeObjectValue(resource);
+        json.writeEndObject();
+    }
+
+    private void writeObject(final String name, final Object resource) throws IOException, JsonGenerationException,
+            JsonMappingException {
+        json.writeObjectFieldStart(name);
+        writeObjectValue(resource);
+        json.writeEndObject();
     }
 
     /**
@@ -182,7 +193,7 @@ public class JsonHalWriter {
      * @throws JsonMappingException
      * @throws JsonGenerationException
      */
-    public void writeObject(final Object object) throws JsonGenerationException, JsonMappingException, IOException {
+    public void writeObjectValue(final Object object) throws JsonGenerationException, JsonMappingException, IOException {
         final Object resource = unwrap(object);
 
         Class<?> type = resource.getClass();
@@ -278,15 +289,11 @@ public class JsonHalWriter {
         if (Collection.class.isAssignableFrom(fieldType)) {
             json.writeArrayFieldStart(fieldName);
             for (final Object object : (Collection<?>) fieldValue) {
-                json.writeStartObject();
                 writeObject(object);
-                json.writeEndObject();
             }
             json.writeEndArray();
         } else if (Resource.class.isAssignableFrom(fieldType)) {
-            json.writeObjectFieldStart(fieldName);
-            writeObject(fieldValue);
-            json.writeEndObject();
+            writeObject(fieldName, fieldValue);
         } else {
             json.writeFieldName(fieldName);
             objectMapper.writeValue(json, fieldValue);
@@ -366,10 +373,9 @@ public class JsonHalWriter {
         json.writeFieldName(rel);
         if (isArray) {
             json.writeStartArray();
-        } else {
-            json.writeStartObject();
         }
         for (final Link link : relLinks) {
+            json.writeStartObject();
             writeString("name", link.getName());
             writeString("title", link.getTitle());
             writeString("href", link.getHref());
@@ -378,11 +384,10 @@ public class JsonHalWriter {
             writeString("profile", link.getProfile());
             writeString("deprecation", link.getDeprecation());
             writeBoolean("templated", link.isTemplated());
+            json.writeEndObject();
         }
         if (isArray) {
             json.writeEndArray();
-        } else {
-            json.writeEndObject();
         }
     }
 
