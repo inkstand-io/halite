@@ -24,7 +24,7 @@ The JSon support allows create spec conform json output from the JAXB based data
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 	</properties>
-
+ 
 	<scm>
 		<developerConnection>scm:git:ssh://github.com/moskitoli/halite.git</developerConnection>
 	</scm>
