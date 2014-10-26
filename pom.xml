@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>li.moskito</groupId>
 	<artifactId>halite</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>Halite</name>
 	<description>A lightweight API of the HAL specification that provides base types for JAXB generated classes and convenience methods to add links or embedd resources.
 
