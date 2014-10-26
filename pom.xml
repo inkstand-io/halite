@@ -123,16 +123,13 @@ The JSon support allows create spec conform json output from the JAXB based data
 					<reuseForks>false</reuseForks>
 					<runOrder>random</runOrder>
 					<enableAssertions>true</enableAssertions>
-					<argLine>-Xms64M -Xmx512M ${surefireArgLine}</argLine>
+					<argLine>-Xms16M -Xmx512M ${surefireArgLine}</argLine>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.10.1</version>
-				<configuration>
-					<additionalJOptions>-J-Xms64M -J-Xmx512M </additionalJOptions>
-				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
