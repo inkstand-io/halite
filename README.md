@@ -24,3 +24,9 @@ Resource r2 = ...;
 Resource r3 = ...;
 HAL.newLink("home", "http://...").title("Home").addTo(r1).addTo(r2).addTo(r3);
 ```
+
+### Outlook
+Support for JSon generation
+Support for XML generation
+Support for HTML generation
+Support for JCR-HAL mapping

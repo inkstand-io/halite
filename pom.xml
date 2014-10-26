@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>li.moskito</groupId>
 	<artifactId>halite</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<name>Halite</name>
 	<description>A lightweight API of the HAL specification that provides base types for JAXB generated classes and convenience methods to add links or embedd resources.
 
@@ -24,7 +24,7 @@ The JSon support allows create spec conform json output from the JAXB based data
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 	</properties>
-
+ 
 	<scm>
 		<developerConnection>scm:git:ssh://github.com/moskitoli/halite.git</developerConnection>
 	</scm>
@@ -104,6 +104,7 @@ The JSon support allows create spec conform json output from the JAXB based data
 					<pushHotfixes>true</pushHotfixes>
 					<!-- Prevents deployments from dev workstations so that they can be done by a CI server -->
 					<noDeploy>true</noDeploy>
+					<alwaysUpdateOrigin>true</alwaysUpdateOrigin>
 					<flowInitContext>
 						<!-- You can customize your development branch name. Why? Because it's faster to type 'git push origin dvlp' than 'git 
 							push origin develop' ;-) -->
@@ -122,8 +123,13 @@ The JSon support allows create spec conform json output from the JAXB based data
 					<reuseForks>false</reuseForks>
 					<runOrder>random</runOrder>
 					<enableAssertions>true</enableAssertions>
-					<argLine>-Xms64M -Xmx512M ${surefireArgLine}</argLine>
+					<argLine>-Xms16M -Xmx512M ${surefireArgLine}</argLine>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.1</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
