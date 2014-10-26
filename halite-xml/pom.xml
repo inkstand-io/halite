@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>li.moskito</groupId>
 		<artifactId>halite</artifactId>
-		<version>0.0.4-SNAPSHOT</version>
+		<version>0.0.3</version>
 	</parent>
 	<artifactId>halite-xml</artifactId>
 	<name>halite-xml</name>
