@@ -1,19 +1,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>li.moskito</groupId>
 	<artifactId>halite</artifactId>
-	<version>0.0.6</version>
+	<version>0.0.13</version>
+	<packaging>pom</packaging>
+
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>A lightweight API of the HAL specification that provides base types for JAXB generated classes and 
 	convenience methods to add links or embedd resources.
     The JSon support allows create spec conform json output from the JAXB based datatypes and a Jax-RS provider to 
     write message bodies.</description>
-	<packaging>pom</packaging>
+	<url>https://github.com/moskitoli/halite</url>
 
 	<properties>
 		<!-- Common Libraries Versions -->
 		<slf4j.version>1.7.6</slf4j.version>
 		<log4j.version>2.0-rc1</log4j.version>
+		<!-- Test lib versions -->
+		<junit.version>4.11</junit.version>
+		<mockito.version>1.9.5</mockito.version>
+
+		<!-- Properties for Jacoco and Sonar -->
 		<!-- Sonar and Code Coverage -->
 		<coverage.unit.test.path>${project.basedir}/../target/jacoco.exec</coverage.unit.test.path>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
@@ -21,9 +29,6 @@
 		<sonar.jacoco.reportPath>${coverage.unit.test.path}</sonar.jacoco.reportPath>
 		<sonar.language>java</sonar.language>
 		<jacoco.version>0.7.1.201405082137</jacoco.version>
-		<!-- Test lib versions -->
-		<junit.version>4.11</junit.version>
-		<mockito.version>1.9.5</mockito.version>
 	</properties>
 
 	<licenses>
@@ -32,16 +37,6 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-		</repository>
-	</distributionManagement>
 
 	<scm>
 		<connection>scm:git:git@github.com:moskitoli/halite.git</connection>
@@ -54,13 +49,66 @@
 			<name>Gerald Muecke</name>
 			<email>gerald@moskito.li</email>
 			<organization>Moskito.li</organization>
-			<organizationUrl>http://www.moskito.li</organizationUrl>
+			<organizationUrl>https://github.com/moskitoli/halite</organizationUrl>
 		</developer>
 	</developers>
 
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
 	<profiles>
 		<profile>
+			<id>qa</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>${jacoco.version}</version>
+						<configuration>
+							<skip>${skipTests}</skip>
+							<includes>
+								<include>org.halite.*</include>
+							</includes>
+							<excludes>
+								<exclude>org.halite.model.*</exclude>
+							</excludes>
+						</configuration>
+						<executions>
+							<execution>
+								<id>prepare-agent</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+								<configuration>
+									<destFile>${coverage.unit.test.path}</destFile>
+									<append>true</append>
+									<propertyName>surefireArgLine</propertyName>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>sonar-maven-plugin</artifactId>
+						<version>2.4</version>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>release</id>
+			<properties>
+				<surefireArgLine />
+			</properties>
 			<build>
 				<plugins>
 					<plugin>
@@ -79,7 +127,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.9.1</version>
+						<version>2.10.1</version>
 						<executions>
 							<execution>
 								<id>attach-javadocs</id>
@@ -88,6 +136,11 @@
 								</goals>
 							</execution>
 						</executions>
+						<configuration>
+							<additionalJOptions>
+								<additionalJOption>-J-Xmx16m </additionalJOption>
+							</additionalJOptions>
+						</configuration>
 					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -102,6 +155,35 @@
 								</goals>
 							</execution>
 						</executions>
+					</plugin>
+					<plugin>
+						<groupId>external.atlassian.jgitflow</groupId>
+						<artifactId>jgitflow-maven-plugin</artifactId>
+						<version>1.0-m4.3</version>
+						<configuration>
+							<enableSshAgent>false</enableSshAgent>
+							<autoVersionSubmodules>true</autoVersionSubmodules>
+							<pushFeatures>true</pushFeatures>
+							<pushReleases>true</pushReleases>
+							<pushHotfixes>true</pushHotfixes>
+							<noDeploy>false</noDeploy>
+							<alwaysUpdateOrigin>true</alwaysUpdateOrigin>
+							<flowInitContext>
+								<developBranchName>development</developBranchName>
+								<versionTagPrefix>rev-</versionTagPrefix>
+							</flowInitContext>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.5</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
@@ -165,24 +247,7 @@
 					<compilerVersion>1.7</compilerVersion>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>external.atlassian.jgitflow</groupId>
-				<artifactId>jgitflow-maven-plugin</artifactId>
-				<version>1.0-m4.3</version>
-				<configuration>
-					<enableSshAgent>false</enableSshAgent>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<pushFeatures>true</pushFeatures>
-					<pushReleases>true</pushReleases>
-					<pushHotfixes>true</pushHotfixes>
-					<noDeploy>true</noDeploy>
-					<alwaysUpdateOrigin>true</alwaysUpdateOrigin>
-					<flowInitContext>
-						<developBranchName>development</developBranchName>
-						<versionTagPrefix>rev-</versionTagPrefix>
-					</flowInitContext>
-				</configuration>
-			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -195,71 +260,10 @@
 					<argLine>-Xms16M -Xmx512M ${surefireArgLine}</argLine>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.1</version>
-				<configuration>
-					<additionalJOptions>
-						<additionalJOption>-J-Xmx16m </additionalJOption>
-					</additionalJOptions>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>jar</goal>
-							<goal>test-jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.5</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco.version}</version>
-				<configuration>
-					<skip>${skipTests}</skip>
-					<includes>
-						<include>org.halite.*</include>
-					</includes>
-					<excludes>
-						<exclude>org.halite.model.*</exclude>
-					</excludes>
-				</configuration>
-				<executions>
-					<execution>
-						<id>prepare-agent</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-						<configuration>
-							<destFile>${coverage.unit.test.path}</destFile>
-							<append>true</append>
-							<propertyName>surefireArgLine</propertyName>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>sonar-maven-plugin</artifactId>
-				<version>2.4</version>
-			</plugin>
+
+
+
+
 		</plugins>
 	</build>
 
