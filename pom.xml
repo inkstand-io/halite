@@ -2,19 +2,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>li.moskito</groupId>
 	<artifactId>halite</artifactId>
-	<version>0.0.5</version>
+	<version>0.0.6</version>
 	<name>${project.groupId}:${project.artifactId}</name>
-	<description>A lightweight API of the HAL specification that provides base types for JAXB generated classes and convenience methods to add links or embedd resources.
-
-The JSon support allows create spec conform json output from the JAXB based datatypes and a Jax-RS provider to write message bodies.</description>
+	<description>A lightweight API of the HAL specification that provides base types for JAXB generated classes and 
+	convenience methods to add links or embedd resources.
+    The JSon support allows create spec conform json output from the JAXB based datatypes and a Jax-RS provider to 
+    write message bodies.</description>
 	<packaging>pom</packaging>
-
-	<licenses>
-		<license>
-			<name>The Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
 
 	<properties>
 		<!-- Common Libraries Versions -->
@@ -32,9 +26,87 @@ The JSon support allows create spec conform json output from the JAXB based data
 		<mockito.version>1.9.5</mockito.version>
 	</properties>
 
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+		</repository>
+	</distributionManagement>
+
 	<scm>
-		<developerConnection>scm:git:ssh://github.com/moskitoli/halite.git</developerConnection>
+		<connection>scm:git:git@github.com:moskitoli/halite.git</connection>
+		<developerConnection>scm:git:git@github.com:moskitoli/halite.git</developerConnection>
+		<url>git@github.com:moskitoli/halite.git</url>
 	</scm>
+
+	<developers>
+		<developer>
+			<name>Gerald Muecke</name>
+			<email>gerald@moskito.li</email>
+			<organization>Moskito.li</organization>
+			<organizationUrl>http://www.moskito.li</organizationUrl>
+		</developer>
+	</developers>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>2.2.1</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.9.1</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<!-- Code Coverage -->
@@ -98,25 +170,15 @@ The JSon support allows create spec conform json output from the JAXB based data
 				<artifactId>jgitflow-maven-plugin</artifactId>
 				<version>1.0-m4.3</version>
 				<configuration>
-					<!-- Enable this to push to origin using SSH keys -->
 					<enableSshAgent>false</enableSshAgent>
-					<!-- Keep your maven submodules at the same version as the parent POM -->
 					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<!-- Pushing in-development features to origin allows all devs to see what each other are working on -->
 					<pushFeatures>true</pushFeatures>
-					<!-- This allows the CI server (e.g. Jenkins) to automatically push new releases to origin; you can then either manually 
-						deploy them or, if you are doing Continuous Deployments, auto-deploy them to prod -->
 					<pushReleases>true</pushReleases>
-					<!-- Hot Fixes should be pushed to origin as well so that any dev can pick them up -->
 					<pushHotfixes>true</pushHotfixes>
-					<!-- Prevents deployments from dev workstations so that they can be done by a CI server -->
 					<noDeploy>true</noDeploy>
 					<alwaysUpdateOrigin>true</alwaysUpdateOrigin>
 					<flowInitContext>
-						<!-- You can customize your development branch name. Why? Because it's faster to type 'git push origin dvlp' than 'git 
-							push origin develop' ;-) -->
 						<developBranchName>development</developBranchName>
-						<!-- You can also customize your tag prefixes -->
 						<versionTagPrefix>rev-</versionTagPrefix>
 					</flowInitContext>
 				</configuration>
@@ -139,7 +201,7 @@ The JSon support allows create spec conform json output from the JAXB based data
 				<version>2.10.1</version>
 				<configuration>
 					<additionalJOptions>
-						 <additionalJOption>-J-Xmx16m </additionalJOption>
+						<additionalJOption>-J-Xmx16m </additionalJOption>
 					</additionalJOptions>
 				</configuration>
 			</plugin>
@@ -154,6 +216,17 @@ The JSon support allows create spec conform json output from the JAXB based data
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.5</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
