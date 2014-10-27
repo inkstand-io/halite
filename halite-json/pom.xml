@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>li.moskito</groupId>
 		<artifactId>halite</artifactId>
-		<version>0.0.10-SNAPSHOT</version>
+		<version>0.0.11-SNAPSHOT</version>
 	</parent>
 	<artifactId>halite-json</artifactId>
 	<name>halite-json</name>
@@ -29,12 +29,12 @@
 		<dependency>
 			<groupId>li.moskito</groupId>
 			<artifactId>halite-model</artifactId>
-			<version>0.0.10-SNAPSHOT</version>
+			<version>0.0.11-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>li.moskito</groupId>
 			<artifactId>halite-core</artifactId>
-			<version>0.0.10-SNAPSHOT</version>
+			<version>0.0.11-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
