@@ -15,17 +15,9 @@
 	<url>https://github.com/moskitoli/halite</url>
 
 	<properties>
-		<gitflowNoDeploy>true</gitflowNoDeploy>
 		<!-- Common Libraries Versions -->
 		<slf4j.version>1.7.6</slf4j.version>
 		<log4j.version>2.0-rc1</log4j.version>
-		<!-- Sonar and Code Coverage -->
-		<coverage.unit.test.path>${project.basedir}/../target/jacoco.exec</coverage.unit.test.path>
-		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<sonar.jacoco.reportPath>${coverage.unit.test.path}</sonar.jacoco.reportPath>
-		<sonar.language>java</sonar.language>
-		<jacoco.version>0.7.1.201405082137</jacoco.version>
 		<!-- Test lib versions -->
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
@@ -67,6 +59,15 @@
 	<profiles>
 		<profile>
 			<id>qa</id>
+			<properties>
+				<!-- Sonar and Code Coverage -->
+				<coverage.unit.test.path>${project.basedir}/../target/jacoco.exec</coverage.unit.test.path>
+				<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+				<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+				<sonar.jacoco.reportPath>${coverage.unit.test.path}</sonar.jacoco.reportPath>
+				<sonar.language>java</sonar.language>
+				<jacoco.version>0.7.1.201405082137</jacoco.version>
+			</properties>
 			<build>
 				<plugins>
 					<plugin>
@@ -172,7 +173,7 @@
 							<pushFeatures>true</pushFeatures>
 							<pushReleases>true</pushReleases>
 							<pushHotfixes>true</pushHotfixes>
-							<noDeploy>${gitflowNoDeploy}</noDeploy>
+							<noDeploy>false</noDeploy>
 							<alwaysUpdateOrigin>true</alwaysUpdateOrigin>
 							<flowInitContext>
 								<developBranchName>development</developBranchName>
