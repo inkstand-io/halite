@@ -12,6 +12,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
+		<gitflowNoDeploy>true</gitflowNoDeploy>
 		<!-- Common Libraries Versions -->
 		<slf4j.version>1.7.6</slf4j.version>
 		<log4j.version>2.0-rc1</log4j.version>
@@ -41,6 +42,7 @@
 		</snapshotRepository>
 		<repository>
 			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
 
@@ -176,7 +178,7 @@
 					<pushFeatures>true</pushFeatures>
 					<pushReleases>true</pushReleases>
 					<pushHotfixes>true</pushHotfixes>
-					<noDeploy>true</noDeploy>
+					<noDeploy>${gitflowNoDeploy}</noDeploy>
 					<alwaysUpdateOrigin>true</alwaysUpdateOrigin>
 					<flowInitContext>
 						<developBranchName>development</developBranchName>
