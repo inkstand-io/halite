@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>li.moskito</groupId>
 	<artifactId>halite</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
+	<version>0.0.5-SNAPSHOT</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>A lightweight API of the HAL specification that provides base types for JAXB generated classes and convenience methods to add links or embedd resources.
 
 The JSon support allows create spec conform json output from the JAXB based datatypes and a Jax-RS provider to write message bodies.</description>
 	<packaging>pom</packaging>
-	
+
 	<licenses>
 		<license>
 			<name>The Apache License, Version 2.0</name>
@@ -36,7 +36,6 @@ The JSon support allows create spec conform json output from the JAXB based data
 	<scm>
 		<developerConnection>scm:git:ssh://github.com/moskitoli/halite.git</developerConnection>
 	</scm>
-	
 
 	<dependencies>
 		<!-- Code Coverage -->
@@ -100,15 +99,25 @@ The JSon support allows create spec conform json output from the JAXB based data
 				<artifactId>jgitflow-maven-plugin</artifactId>
 				<version>1.0-m4.3</version>
 				<configuration>
+					<!-- Enable this to push to origin using SSH keys -->
 					<enableSshAgent>false</enableSshAgent>
+					<!-- Keep your maven submodules at the same version as the parent POM -->
 					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<!-- Pushing in-development features to origin allows all devs to see what each other are working on -->
 					<pushFeatures>true</pushFeatures>
+					<!-- This allows the CI server (e.g. Jenkins) to automatically push new releases to origin; you can then either manually 
+						deploy them or, if you are doing Continuous Deployments, auto-deploy them to prod -->
 					<pushReleases>true</pushReleases>
+					<!-- Hot Fixes should be pushed to origin as well so that any dev can pick them up -->
 					<pushHotfixes>true</pushHotfixes>
+					<!-- Prevents deployments from dev workstations so that they can be done by a CI server -->
 					<noDeploy>true</noDeploy>
 					<alwaysUpdateOrigin>true</alwaysUpdateOrigin>
 					<flowInitContext>
+						<!-- You can customize your development branch name. Why? Because it's faster to type 'git push origin dvlp' than 'git 
+							push origin develop' ;-) -->
 						<developBranchName>development</developBranchName>
+						<!-- You can also customize your tag prefixes -->
 						<versionTagPrefix>rev-</versionTagPrefix>
 					</flowInitContext>
 				</configuration>
@@ -131,7 +140,7 @@ The JSon support allows create spec conform json output from the JAXB based data
 				<version>2.10.1</version>
 				<configuration>
 					<additionalJOptions>
-						 <additionalJOption>-J-Xmx16m</additionalJOption>
+						 <additionalJOption>-J-Xmx16m </additionalJOption>
 					</additionalJOptions>
 				</configuration>
 			</plugin>
