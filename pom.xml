@@ -107,6 +107,9 @@
 		</profile>
 		<profile>
 			<id>release</id>
+			<properties>
+				<surefireArgLine/>
+			</properties>
 			<build>
 				<plugins>
 					<plugin>
