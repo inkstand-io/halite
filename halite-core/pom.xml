@@ -3,7 +3,7 @@
   <parent>
     <groupId>li.moskito</groupId>
     <artifactId>halite</artifactId>
-    <version>0.0.13</version>
+    <version>0.0.14-SNAPSHOT</version>
   </parent>
   <artifactId>halite-core</artifactId>
   <name>halite-core</name>
@@ -12,7 +12,7 @@
   	<dependency>
   		<groupId>li.moskito</groupId>
   		<artifactId>halite-model</artifactId>
-  		<version>0.0.13</version>
+  		<version>0.0.14-SNAPSHOT</version>
   	</dependency>
   </dependencies>
 </project>
