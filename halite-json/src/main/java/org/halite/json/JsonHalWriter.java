@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlType;
-
 import org.halite.HAL;
 import org.halite.ResourceAdapter;
 import org.halite.model.Link;
@@ -140,6 +138,7 @@ public class JsonHalWriter {
         this.setOption(Option.WRITE_EMPTY_EMBEDDED, false);
 
         this.objectMapper = new ObjectMapper();
+        this.json.setCodec(this.objectMapper);
     }
 
     public JsonHalWriter(final JsonGenerator generator) {
@@ -158,13 +157,15 @@ public class JsonHalWriter {
      * Writes the resource as a Json Object. The Json Object is surrounded by { and };
      * 
      * @param resource
-     * @throws IOException
+     * @throws Exception
      */
-    public void write(final Object resource) throws IOException {
+    public void write(final Object resource) throws Exception {
 
         writeObject(resource);
         if (getOption(Option.CLOSE_ON_WRITE_RESOURCE)) {
             json.close();
+        } else {
+            json.flush();
         }
     }
 
@@ -204,9 +205,12 @@ public class JsonHalWriter {
             while (!Object.class.equals(type) && !Resource.class.equals(type)) {
                 type = writeFieldsOfType(type, object);
             }
-        } else if (!isXMLType(resource)) {
+            json.flush();
+        } else {
             json.writeObject(object);
+            json.flush();
         }
+
     }
 
     /**
@@ -222,17 +226,6 @@ public class JsonHalWriter {
             return ((ResourceAdapter) resource).getResource();
         }
         return resource;
-    }
-
-    /**
-     * Checks if the object is of an JAXB Type that is annotated with {@link XmlType}
-     * 
-     * @param object
-     *            the object to check
-     * @return <code>true</code> if the object's type is annotated with {@link XmlType}
-     */
-    private boolean isXMLType(final Object object) {
-        return object.getClass().getAnnotation(XmlType.class) != null;
     }
 
     /**
@@ -296,6 +289,7 @@ public class JsonHalWriter {
             writeObject(fieldName, fieldValue);
         } else {
             json.writeFieldName(fieldName);
+            // TODO change to json.writeObject(fieldValue); as the object mapper is already associated
             objectMapper.writeValue(json, fieldValue);
         }
     }
@@ -337,6 +331,7 @@ public class JsonHalWriter {
                 writeObject(res);
             }
             json.writeEndArray();
+            json.flush();
         }
     }
 
@@ -355,6 +350,7 @@ public class JsonHalWriter {
                 writeLink(rel, links.get(rel));
             }
             json.writeEndObject();
+            json.flush();
         }
     }
 
@@ -369,7 +365,10 @@ public class JsonHalWriter {
      * @throws IOException
      */
     public void writeLink(final String rel, final List<Link> relLinks) throws IOException {
+        assert !relLinks.isEmpty() : "link list must not be empty";
+
         final boolean isArray = relLinks.size() > 1;
+
         json.writeFieldName(rel);
         if (isArray) {
             json.writeStartArray();
@@ -389,6 +388,7 @@ public class JsonHalWriter {
         if (isArray) {
             json.writeEndArray();
         }
+        json.flush();
     }
 
     private void writeBoolean(final String name, final Boolean value) throws IOException {
@@ -418,9 +418,7 @@ public class JsonHalWriter {
     }
 
     protected <T> T getOption(final Option option) {
-        if (!isSetOption(option)) {
-            return null;
-        }
+        // as all default options are set, the get(option) method will always return a non-null value
         return option.value(this.options.get(option));
     }
 }

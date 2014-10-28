@@ -260,10 +260,6 @@
 					<argLine>-Xms16M -Xmx512M ${surefireArgLine}</argLine>
 				</configuration>
 			</plugin>
-
-
-
-
 		</plugins>
 	</build>
 
