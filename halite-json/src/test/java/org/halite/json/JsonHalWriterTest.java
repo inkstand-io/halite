@@ -96,8 +96,46 @@ public class JsonHalWriterTest {
     }
 
     @Test
-    public void testWriteObjectValue_resource() throws Exception {
-        throw new RuntimeException("not yet implemented");
+    public void testWriteObjectValue_emptyResource_withDefaults() throws Exception {
+        final Resource res = new Resource();
+
+        this.generator.writeStartObject();
+        this.subject.writeObjectValue(res);
+        this.generator.writeEndObject();
+        this.generator.flush();
+
+        // links are written, because write empty links is default
+        final String expected = "{ \"_links\":{}}";
+        assertJsonDataEquals(expected);
+    }
+
+    @Test
+    public void testWriteObjectValue_emptyResource_noWriteEmptyLinks() throws Exception {
+        final Resource res = new Resource();
+
+        this.generator.writeStartObject();
+        this.subject.writeObjectValue(res);
+        this.generator.writeEndObject();
+        this.generator.flush();
+
+        // links are written, because write empty links is default
+        final String expected = "{ }";
+        assertJsonDataEquals(expected);
+    }
+
+    @Test
+    public void testWriteObjectValue_emptyResource_writeEmptyEmbedded() throws Exception {
+        final Resource res = new Resource();
+        this.subject.setOption(Option.WRITE_EMPTY_EMBEDDED, true);
+
+        this.generator.writeStartObject();
+        this.subject.writeObjectValue(res);
+        this.generator.writeEndObject();
+        this.generator.flush();
+
+        // links are written, because write empty links is default
+        final String expected = "{ \"_links\":{},\"_embedded\":{} }";
+        assertJsonDataEquals(expected);
     }
 
     /**
@@ -139,12 +177,96 @@ public class JsonHalWriterTest {
     }
 
     @Test
-    public void testWriteEmbedded() throws Exception {
-        throw new RuntimeException("not yet implemented");
+    public void testWriteEmbedded_singlePojoResource() throws Exception {
+        final Resource res = new Resource();
+        res.getEmbedded().add(createResourcePojo("testName", 1234, 12.34));
+
+        this.generator.writeStartObject();
+        this.subject.writeEmbedded(res);
+        this.generator.writeEndObject();
+        this.generator.flush();
+
+        // links are written, because write empty links is default
+        final String expected = "{ \"_embedded\": { "
+                + "\"_links\":{},\"name\": \"testName\",\"size\": 1234,\"scale\": 12.34}}";
+        assertJsonDataEquals(expected);
     }
 
     @Test
-    public void testWriteLinks_writeEmptyLinks() throws Exception {
+    public void testWriteEmbedded_multiplePojoResource() throws Exception {
+        final Resource res = new Resource();
+        res.getEmbedded().add(createResourcePojo("testName1", 1234, 12.34));
+        res.getEmbedded().add(createResourcePojo("testName2", 5678, 56.78));
+
+        this.generator.writeStartObject();
+        this.subject.writeEmbedded(res);
+        this.generator.writeEndObject();
+        this.generator.flush();
+
+        // links are written, because write empty links is default
+        final String expected = "{ \"_embedded\": { "
+                + "\"_links\":{},\"name\": \"testName1\",\"size\": 1234,\"scale\": 12.34},"
+                + "\"_links\":{},\"name\": \"testName2\",\"size\": 5678,\"scale\": 56.78}"
+                + "}";
+        assertJsonDataEquals(expected);
+    }
+
+    private ResourcePojo createResourcePojo(final String name, final int size, final double scale) {
+        final ResourcePojo pojo = new ResourcePojo();
+        pojo.setName(name);
+        pojo.setSize(size);
+        pojo.setScale(scale);
+        return pojo;
+
+    }
+
+    @Test
+    public void testWriteEmbedded_emptyResource() throws Exception {
+        final Resource res = new Resource();
+        final Resource embeddedRes = new Resource();
+        res.getEmbedded().add(embeddedRes);
+
+        this.generator.writeStartObject();
+        this.subject.writeEmbedded(res);
+        this.generator.writeEndObject();
+        this.generator.flush();
+
+        // links are written, because write empty links is default
+        final String expected = "{ \"_embedded\": { \"_links\":{} }}";
+        assertJsonDataEquals(expected);
+    }
+
+    @Test
+    public void testWriteEmbedded_emptyEmbedded_emptyEmbeddedDefault() throws Exception {
+        final Resource res = new Resource();
+
+        this.generator.writeStartObject();
+        this.subject.writeEmbedded(res);
+        this.generator.writeEndObject();
+        this.generator.flush();
+
+        // links are written, because write empty links is default
+        final String expected = "{ }";
+        assertJsonDataEquals(expected);
+    }
+
+    @Test
+    public void testWriteEmbedded_emptyEmbedded_emptyEmbeddedEnabled() throws Exception {
+        final Resource res = new Resource();
+        this.subject.setOption(Option.WRITE_EMPTY_EMBEDDED, true);
+
+        this.generator.writeStartObject();
+        this.subject.writeEmbedded(res);
+        this.generator.writeEndObject();
+        this.generator.flush();
+
+        // links are written, because write empty links is default
+        final String expected = "{ \"_embedded\":{} }";
+        assertJsonDataEquals(expected);
+    }
+
+    @Test
+    public void testWriteLinks_emptyLinks_emptyLinksDefault() throws Exception {
         final Resource res = new Resource();
 
         this.generator.writeStartObject();
@@ -158,7 +280,7 @@ public class JsonHalWriterTest {
     }
 
     @Test
-    public void testWriteLinks_noWriteEmptyLinks() throws Exception {
+    public void testWriteLinks_emptyLinks_emptyLinksDisabled() throws Exception {
         final Resource res = new Resource();
         this.subject.setOption(Option.WRITE_EMPTY_LINKS, false);
 
@@ -385,6 +507,44 @@ public class JsonHalWriterTest {
         @XmlAttribute
         private int size;
         @XmlAttribute
+        private double scale;
+
+        public void setName(final String name) {
+            this.name = name;
+        }
+
+        public void setSize(final int size) {
+            this.size = size;
+        }
+
+        public void setScale(final double scale) {
+            this.scale = scale;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public double getScale() {
+            return scale;
+        }
+
+    }
+
+    /**
+     * A POJO extending a resource, used for testsing serialization of objects
+     * 
+     * @author gmuecke
+     * 
+     */
+    public static class ResourcePojo extends Resource {
+
+        private String name;
+        private int size;
         private double scale;
 
         public void setName(final String name) {
