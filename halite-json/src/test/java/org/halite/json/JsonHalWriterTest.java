@@ -91,8 +91,23 @@ public class JsonHalWriterTest {
     }
 
     @Test
-    public void testWrite() throws Exception {
-        throw new RuntimeException("not yet implemented");
+    public void testWrite_resource() throws Exception {
+        final ResourcePojo pojo = new ResourcePojo();
+        pojo.getLink().add(createLink("rel1", "http://test1", "aName1", "aTitle1", "aType1"));
+        pojo.getLink().add(createLink("rel2", "http://test2", "aName2", "aTitle2", "aType2"));
+        pojo.getEmbedded().add(createResourcePojo("test", 1234, 12.34));
+
+        this.subject.write(pojo);
+        final String expected = "{"
+                + "\"_links\": { "
+                + "\"rel1\": {\"name\":\"aName1\", \"title\":\"aTitle1\",  \"href\":\"http://test1\", \"type\":\"aType1\"},"
+                + "\"rel2\": {\"name\":\"aName2\", \"title\":\"aTitle2\",  \"href\":\"http://test2\", \"type\":\"aType2\"} "
+                + "},"
+                + "\"_embedded\": {"
+                + "\"rel1\": {\"name\":\"test\", \"size\":1234,  \"scale\":12.34}"
+                + "}"
+                + "}";
+        assertJsonDataEquals(expected);
     }
 
     @Test
