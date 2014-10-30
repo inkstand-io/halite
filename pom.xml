@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>li.moskito</groupId>
@@ -29,7 +30,6 @@
 		<sonar.jacoco.reportPath>${coverage.unit.test.path}</sonar.jacoco.reportPath>
 		<sonar.language>java</sonar.language>
 		<jacoco.version>0.7.1.201405082137</jacoco.version>
-		<surefireArgLine />
 	</properties>
 
 	<licenses>
@@ -67,6 +67,15 @@
 
 	<profiles>
 		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+					<surefireArgLine />
+			</properties>
+		</profile>
+		<profile>
 			<id>qa</id>
 			<build>
 				<plugins>
@@ -77,11 +86,8 @@
 						<configuration>
 							<skip>${skipTests}</skip>
 							<includes>
-								<include>org.halite.*</include>
+								<include>li.moskito.halite.*</include>
 							</includes>
-							<excludes>
-								<exclude>org.halite.model.*</exclude>
-							</excludes>
 						</configuration>
 						<executions>
 							<execution>

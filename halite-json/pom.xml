@@ -6,8 +6,9 @@
 		<artifactId>halite</artifactId>
 		<version>0.0.14-SNAPSHOT</version>
 	</parent>
+
 	<artifactId>halite-json</artifactId>
-	<name>halite-json</name>
+	<name>${project.groupId}:${project.artifactId}</name>
 	<description>JSON generation support for the HAL specification</description>
 
 	<dependencies>
