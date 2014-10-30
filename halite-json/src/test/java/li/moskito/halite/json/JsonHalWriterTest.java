@@ -1,4 +1,4 @@
-package org.halite.json;
+package li.moskito.halite.json;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -11,9 +11,11 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-import org.halite.json.JsonHalWriter.Option;
-import org.halite.model.Link;
-import org.halite.model.Resource;
+import li.moskito.halite.HAL;
+import li.moskito.halite.Link;
+import li.moskito.halite.Resource;
+import li.moskito.halite.json.JsonHalWriter.Option;
+
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
@@ -92,19 +94,22 @@ public class JsonHalWriterTest {
 
     @Test
     public void testWrite_resource() throws Exception {
-        final ResourcePojo pojo = new ResourcePojo();
-        pojo.getLink().add(createLink("rel1", "http://test1", "aName1", "aTitle1", "aType1"));
-        pojo.getLink().add(createLink("rel2", "http://test2", "aName2", "aTitle2", "aType2"));
-        pojo.getEmbedded().add(createResourcePojo("test", 1234, 12.34));
+        final ResourcePojo pojo = createResourcePojo("aName", 1234, 12.34);
+        pojo.addLink(createLink("rel1", "http://test1", "aName1", "aTitle1", "aType1"));
+        pojo.addLink(createLink("rel2", "http://test2", "aName2", "aTitle2", "aType2"));
+        pojo.embed("pojo", createResourcePojo("test", 1234, 12.34));
 
         this.subject.write(pojo);
         final String expected = "{"
                 + "\"_links\": { "
+                + "\"self\": {\"href\":\"pojo\"},"
                 + "\"rel1\": {\"name\":\"aName1\", \"title\":\"aTitle1\",  \"href\":\"http://test1\", \"type\":\"aType1\"},"
                 + "\"rel2\": {\"name\":\"aName2\", \"title\":\"aTitle2\",  \"href\":\"http://test2\", \"type\":\"aType2\"} "
                 + "},"
                 + "\"_embedded\": {"
-                + "\"rel1\": {\"name\":\"test\", \"size\":1234,  \"scale\":12.34}"
+                + "\"pojo\": {"
+                + "\"_links\": { \"self\": {\"href\":\"pojo\"}},"
+                + "\"name\":\"test\", \"size\":1234,  \"scale\":12.34}"
                 + "}"
                 + "}";
         assertJsonDataEquals(expected);
@@ -112,7 +117,7 @@ public class JsonHalWriterTest {
 
     @Test
     public void testWriteObjectValue_emptyResource_withDefaults() throws Exception {
-        final Resource res = new Resource();
+        final Resource res = createResource();
 
         this.generator.writeStartObject();
         this.subject.writeObjectValue(res);
@@ -126,7 +131,7 @@ public class JsonHalWriterTest {
 
     @Test
     public void testWriteObjectValue_emptyResource_noWriteEmptyLinks() throws Exception {
-        final Resource res = new Resource();
+        final Resource res = createResource();
 
         this.generator.writeStartObject();
         this.subject.writeObjectValue(res);
@@ -140,8 +145,8 @@ public class JsonHalWriterTest {
 
     @Test
     public void testWriteObjectValue_emptyResource_writeEmptyEmbedded() throws Exception {
-        final Resource res = new Resource();
         this.subject.setOption(Option.WRITE_EMPTY_EMBEDDED, true);
+        final Resource res = createResource();
 
         this.generator.writeStartObject();
         this.subject.writeObjectValue(res);
@@ -149,7 +154,7 @@ public class JsonHalWriterTest {
         this.generator.flush();
 
         // links are written, because write empty links is default
-        final String expected = "{ \"_links\":{},\"_embedded\":{} }";
+        final String expected = "{ \"_links\":{ \"self\":{\"href\":\"resource\"}},\"_embedded\":{} }";
         assertJsonDataEquals(expected);
     }
 
@@ -193,8 +198,8 @@ public class JsonHalWriterTest {
 
     @Test
     public void testWriteEmbedded_singlePojoResource() throws Exception {
-        final Resource res = new Resource();
-        res.getEmbedded().add(createResourcePojo("testName", 1234, 12.34));
+        final Resource res = createResource();
+        res.embed("aRel", createResourcePojo("testName", 1234, 12.34));
 
         this.generator.writeStartObject();
         this.subject.writeEmbedded(res);
@@ -203,43 +208,42 @@ public class JsonHalWriterTest {
 
         // links are written, because write empty links is default
         final String expected = "{ \"_embedded\": { "
-                + "\"_links\":{},\"name\": \"testName\",\"size\": 1234,\"scale\": 12.34}}";
+                + "   \"aRel\": {"
+                + "     \"_links\":{ \"self\": {\"href\":\"pojo\"}},"
+                + "     \"name\": \"testName\","
+                + "     \"size\": 1234,"
+                + "     \"scale\": 12.34}}}";
         assertJsonDataEquals(expected);
     }
 
     @Test
     public void testWriteEmbedded_multiplePojoResource() throws Exception {
-        final Resource res = new Resource();
-        res.getEmbedded().add(createResourcePojo("testName1", 1234, 12.34));
-        res.getEmbedded().add(createResourcePojo("testName2", 5678, 56.78));
-
+        final Resource res = createResource();
+        //@formatter:off
+        res.embed("aRel", 
+                createResourcePojo("testName1", 1234, 12.34), 
+                createResourcePojo("testName2", 5678, 56.78));
+        // @formatter:on
         this.generator.writeStartObject();
         this.subject.writeEmbedded(res);
         this.generator.writeEndObject();
         this.generator.flush();
 
         // links are written, because write empty links is default
-        final String expected = "{ \"_embedded\": { "
-                + "\"_links\":{},\"name\": \"testName1\",\"size\": 1234,\"scale\": 12.34},"
-                + "\"_links\":{},\"name\": \"testName2\",\"size\": 5678,\"scale\": 56.78}"
-                + "}";
+        final String expected = "{  \"_embedded\" : { \"aRel\": ["
+                + "{\"_links\" : {\"self\" : {\"href\" : \"pojo\"}},"
+                + "\"name\" : \"testName1\",\"size\" : 1234,\"scale\" : 12.34}, "
+                + "{\"_links\" : {\"self\" : {\"href\" : \"pojo\"}},"
+                + "\"name\" : \"testName2\",\"size\" : 5678,\"scale\" : 56.78}"
+                + "]}}";
         assertJsonDataEquals(expected);
-    }
-
-    private ResourcePojo createResourcePojo(final String name, final int size, final double scale) {
-        final ResourcePojo pojo = new ResourcePojo();
-        pojo.setName(name);
-        pojo.setSize(size);
-        pojo.setScale(scale);
-        return pojo;
-
     }
 
     @Test
     public void testWriteEmbedded_emptyResource() throws Exception {
-        final Resource res = new Resource();
-        final Resource embeddedRes = new Resource();
-        res.getEmbedded().add(embeddedRes);
+        final Resource res = createResource();
+        final Resource embeddedRes = createResource();
+        res.embed("child", embeddedRes);
 
         this.generator.writeStartObject();
         this.subject.writeEmbedded(res);
@@ -247,13 +251,15 @@ public class JsonHalWriterTest {
         this.generator.flush();
 
         // links are written, because write empty links is default
-        final String expected = "{ \"_embedded\": { \"_links\":{} }}";
+        final String expected = "{ \"_embedded\": "
+                + "{ \"child\": {\"_links\":"
+                + "{ \"self\": {\"href\":\"resource\"}}}}}";
         assertJsonDataEquals(expected);
     }
 
     @Test
     public void testWriteEmbedded_emptyEmbedded_emptyEmbeddedDefault() throws Exception {
-        final Resource res = new Resource();
+        final Resource res = createResource();
 
         this.generator.writeStartObject();
         this.subject.writeEmbedded(res);
@@ -267,8 +273,9 @@ public class JsonHalWriterTest {
 
     @Test
     public void testWriteEmbedded_emptyEmbedded_emptyEmbeddedEnabled() throws Exception {
-        final Resource res = new Resource();
         this.subject.setOption(Option.WRITE_EMPTY_EMBEDDED, true);
+
+        final Resource res = createResource();
 
         this.generator.writeStartObject();
         this.subject.writeEmbedded(res);
@@ -282,7 +289,7 @@ public class JsonHalWriterTest {
 
     @Test
     public void testWriteLinks_emptyLinks_emptyLinksDefault() throws Exception {
-        final Resource res = new Resource();
+        final Resource res = createResource();
 
         this.generator.writeStartObject();
         this.subject.writeLinks(res);
@@ -296,8 +303,9 @@ public class JsonHalWriterTest {
 
     @Test
     public void testWriteLinks_emptyLinks_emptyLinksDisabled() throws Exception {
-        final Resource res = new Resource();
         this.subject.setOption(Option.WRITE_EMPTY_LINKS, false);
+
+        final Resource res = createResource();
 
         this.generator.writeStartObject();
         this.subject.writeLinks(res);
@@ -311,8 +319,8 @@ public class JsonHalWriterTest {
 
     @Test
     public void testWriteLinks_singleLinkResource() throws Exception {
-        final Resource res = new Resource();
-        res.getLink().add(createLink("rel", "http://abc.test.com", "link", "Title", "json"));
+        final Resource res = createResource();
+        res.addLink(createLink("rel", "http://abc.test.com", "link", "Title", "json"));
 
         this.generator.writeStartObject();
         this.subject.writeLinks(res);
@@ -328,11 +336,11 @@ public class JsonHalWriterTest {
 
     @Test
     public void testWriteLinks_multipleLinkResource() throws Exception {
-        final Resource res = new Resource();
-        res.getLink().add(createLink("rel", "http://ref.test.com", "shop", "Title1", "json"));
-        res.getLink().add(createLink("rel", "http://ref.test.org", "form", "Title2", "html"));
-        res.getLink().add(createLink("abc", "http://abc.test.com", "link", "Title3", "text"));
-        res.getLink().add(createLink("def", "http://def.test.com", "link", "Title4", "xml"));
+        final Resource res = createResource();
+        res.addLink(createLink("rel", "http://ref.test.com", "shop", "Title1", "json"));
+        res.addLink(createLink("rel", "http://ref.test.org", "form", "Title2", "html"));
+        res.addLink(createLink("abc", "http://abc.test.com", "link", "Title3", "text"));
+        res.addLink(createLink("def", "http://def.test.com", "link", "Title4", "xml"));
 
         this.generator.writeStartObject();
         this.subject.writeLinks(res);
@@ -461,13 +469,20 @@ public class JsonHalWriterTest {
      */
     private Link createLink(final String rel, final String href, final String name, final String title,
             final String type) {
-        final Link link = new Link();
-        link.setRel(rel);
-        link.setHref(href);
-        link.setName(name);
-        link.setTitle(title);
-        link.setType(type);
-        return link;
+        return HAL.newLink(rel, href).name(name).title(title).type(type);
+    }
+
+    private Resource createResource() {
+        return HAL.newResource("resource");
+    }
+
+    private ResourcePojo createResourcePojo(final String name, final int size, final double scale) {
+        final ResourcePojo pojo = new ResourcePojo();
+        pojo.setName(name);
+        pojo.setSize(size);
+        pojo.setScale(scale);
+        return pojo;
+
     }
 
     /**
@@ -557,6 +572,10 @@ public class JsonHalWriterTest {
      * 
      */
     public static class ResourcePojo extends Resource {
+
+        public ResourcePojo() {
+            super("pojo");
+        }
 
         private String name;
         private int size;

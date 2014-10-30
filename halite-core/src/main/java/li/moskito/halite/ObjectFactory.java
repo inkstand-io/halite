@@ -23,7 +23,7 @@ import javax.xml.namespace.QName;
  * 
  */
 @XmlRegistry
-public class ObjectFactory {
+class ObjectFactory {
 
     private final static QName _Resource_QNAME = new QName("http://moskito.li/schemas/halite/v1", "resource");
 

@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -163,6 +164,15 @@ public class Resource {
     }
 
     /**
+     * Returns all the relations of the embedded resources
+     * 
+     * @return a set of all embedded rels
+     */
+    public Set<String> getEmbeddedRels() {
+        return embedded.keySet();
+    }
+
+    /**
      * Retrieves the embedded resource of the specified relations.
      * 
      * @param rel
@@ -232,8 +242,9 @@ public class Resource {
     }
 
     /**
+     * Returns all the links of the resource in a list.
      * 
-     * @return
+     * @return the list of links
      */
     @XmlElement(name = "link")
     public List<Link> getLinks() {
@@ -242,6 +253,15 @@ public class Resource {
             result.addAll(relLinks);
         }
         return result;
+    }
+
+    /**
+     * Returns all the link relations.
+     * 
+     * @return set of all relations
+     */
+    public Set<String> getLinkRels() {
+        return links.keySet();
     }
 
     /**

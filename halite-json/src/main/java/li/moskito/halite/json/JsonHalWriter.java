@@ -1,4 +1,4 @@
-package org.halite.json;
+package li.moskito.halite.json;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -8,11 +8,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.halite.HAL;
-import org.halite.ResourceAdapter;
-import org.halite.model.Link;
-import org.halite.model.Resource;
+import li.moskito.halite.Link;
+import li.moskito.halite.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -194,8 +194,8 @@ public class JsonHalWriter {
      * @throws JsonMappingException
      * @throws JsonGenerationException
      */
-    public void writeObjectValue(final Object object) throws JsonGenerationException, JsonMappingException, IOException {
-        final Object resource = unwrap(object);
+    public void writeObjectValue(final Object resource) throws JsonGenerationException, JsonMappingException,
+            IOException {
 
         Class<?> type = resource.getClass();
         if (Resource.class.isAssignableFrom(type)) {
@@ -203,29 +203,14 @@ public class JsonHalWriter {
             writeLinks((Resource) resource);
             writeEmbedded((Resource) resource);
             while (!Object.class.equals(type) && !Resource.class.equals(type)) {
-                type = writeFieldsOfType(type, object);
+                type = writeFieldsOfType(type, resource);
             }
             json.flush();
         } else {
-            json.writeObject(object);
+            json.writeObject(resource);
             json.flush();
         }
 
-    }
-
-    /**
-     * Checks if the resource is a {@link ResourceAdapter} and extracts the {@link Resource} from it. If its no
-     * {@link ResourceAdapter} the resource itself is returned.
-     * 
-     * @param resource
-     *            the resource to check
-     * @return the resource itself or the resource from the resource adapter
-     */
-    private Object unwrap(final Object resource) {
-        if (resource instanceof ResourceAdapter) {
-            return ((ResourceAdapter) resource).getResource();
-        }
-        return resource;
     }
 
     /**
@@ -324,15 +309,43 @@ public class JsonHalWriter {
      * @throws IOException
      */
     public void writeEmbedded(final Resource resource) throws IOException {
-        final List<Resource> embedded = resource.getEmbedded();
-        if (!embedded.isEmpty() || (Boolean) getOption(Option.WRITE_EMPTY_EMBEDDED)) {
-            json.writeArrayFieldStart("_embedded");
-            for (final Resource res : resource.getEmbedded()) {
-                writeObject(res);
+        final Set<String> rels = resource.getEmbeddedRels();
+        if (!rels.isEmpty() || (Boolean) getOption(Option.WRITE_EMPTY_EMBEDDED)) {
+            json.writeObjectFieldStart("_embedded");
+            for (final String rel : rels) {
+                writeEmbedded(rel, resource.getEmbedded(rel));
             }
-            json.writeEndArray();
+            json.writeEndObject();
             json.flush();
         }
+    }
+
+    /**
+     * Writes a set of {@link Link}s that share the same relation. If there is just one link contained in the list, it
+     * is not written as an array, otherwise an array of links is created.
+     * 
+     * @param rel
+     *            the relation of the links
+     * @param relLinks
+     *            a list of links that all have the relation
+     * @throws IOException
+     */
+    public void writeEmbedded(final String rel, final List<Resource> resources) throws IOException {
+        assert !resources.isEmpty() : "link list must not be empty";
+
+        final boolean isArray = resources.size() > 1;
+
+        json.writeFieldName(rel);
+        if (isArray) {
+            json.writeStartArray();
+        }
+        for (final Resource resource : resources) {
+            writeObject(resource);
+        }
+        if (isArray) {
+            json.writeEndArray();
+        }
+        json.flush();
     }
 
     /**
@@ -343,11 +356,13 @@ public class JsonHalWriter {
      * @throws IOException
      */
     public void writeLinks(final Resource resource) throws IOException {
-        final Map<String, List<Link>> links = HAL.wrap(resource).getLinks();
-        if (!links.isEmpty() || (Boolean) getOption(Option.WRITE_EMPTY_LINKS)) {
+
+        final Set<String> rels = resource.getLinkRels();
+
+        if (!rels.isEmpty() || (Boolean) getOption(Option.WRITE_EMPTY_LINKS)) {
             json.writeObjectFieldStart("_links");
-            for (final String rel : links.keySet()) {
-                writeLink(rel, links.get(rel));
+            for (final String rel : rels) {
+                writeLink(rel, resource.getLinks(rel));
             }
             json.writeEndObject();
             json.flush();

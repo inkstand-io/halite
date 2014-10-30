@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +24,12 @@ public class ResourceTest {
         this.factory = new ObjectFactory();
         this.subject = factory.createResource("resource");
 
+    }
+
+    private Resource createResource(final String rel, final String uri) {
+        final Resource res = factory.createResource(uri);
+        res.setRel(rel);
+        return res;
     }
 
     @Test
@@ -106,12 +113,6 @@ public class ResourceTest {
         // assert
         assertNotNull(others);
         assertTrue(others.isEmpty());
-    }
-
-    private Resource createResource(final String rel, final String uri) {
-        final Resource res = factory.createResource(uri);
-        res.setRel(rel);
-        return res;
     }
 
     @Test
@@ -331,5 +332,38 @@ public class ResourceTest {
     public void testGetURI_noSelfLink() throws Exception {
         final Resource res = new Resource();
         res.getURI().toString();
+    }
+
+    @Test
+    public void testGetEmbeddedRels() throws Exception {
+        final List<Resource> resources = new ArrayList<>();
+        resources.add(createResource("rel1", "child"));
+        resources.add(createResource("rel2", "child"));
+        resources.add(createResource("rel3", "child"));
+        this.subject.setEmbedded(resources);
+
+        final Set<String> rels = subject.getEmbeddedRels();
+        assertNotNull(rels);
+        assertEquals(3, rels.size());
+        assertTrue(rels.contains("rel1"));
+        assertTrue(rels.contains("rel2"));
+        assertTrue(rels.contains("rel3"));
+    }
+
+    @Test
+    public void testGetLinkRels() throws Exception {
+        // prepare
+        final List<Link> links = new ArrayList<>();
+        links.add(factory.createLink("rel1", "href"));
+        links.add(factory.createLink("rel2", "href"));
+        links.add(factory.createLink("rel3", "href"));
+        this.subject.setLinks(links);
+
+        final Set<String> rels = subject.getLinkRels();
+        assertNotNull(rels);
+        assertEquals(3, rels.size());
+        assertTrue(rels.contains("rel1"));
+        assertTrue(rels.contains("rel2"));
+        assertTrue(rels.contains("rel3"));
     }
 }
