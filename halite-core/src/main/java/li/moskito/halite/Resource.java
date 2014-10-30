@@ -90,7 +90,6 @@ public class Resource {
         this.embedded = new HashMap<String, List<Resource>>();
     }
 
-    // TODO add URI to resource which creates a link to self
     // TODO add representation (json, html) support
     // TODO add support to create links to other Resource Objects linkTo(Resource)
 
@@ -231,11 +230,11 @@ public class Resource {
             if (res.getRel() == null) {
                 continue;
             }
-            final String rel = res.getRel();
-            if (!this.embedded.containsKey(rel)) {
-                this.embedded.put(rel, new ArrayList<Resource>());
+            final String relation = res.getRel();
+            if (!this.embedded.containsKey(relation)) {
+                this.embedded.put(relation, new ArrayList<Resource>());
             }
-            this.embedded.get(rel).add(res);
+            this.embedded.get(relation).add(res);
         }
 
         return this;
@@ -283,7 +282,6 @@ public class Resource {
      * @return a list of all links with the same relation
      */
     public List<Link> getLinks(final String rel) {
-        assert rel != null : "rel must not be null";
 
         if (links.containsKey(rel)) {
             return Collections.unmodifiableList(links.get(rel));
@@ -301,8 +299,6 @@ public class Resource {
      * @return the link or <code>null</code> if no link was found
      */
     public Link getLink(final String rel, final String name) {
-        assert name != null : "name must not be null";
-        assert rel != null : "rel must not be null";
 
         if (!links.containsKey(rel)) {
             return null;
@@ -325,7 +321,6 @@ public class Resource {
      * @return the link or <code>null</code> if no link was found, or no link with the rel and no name was found.
      */
     public Link getLink(final String rel) {
-        assert rel != null : "rel must not be null";
 
         if (!links.containsKey(rel)) {
             return null;
@@ -347,11 +342,11 @@ public class Resource {
      */
     public Resource addLink(final Link... newLink) {
         for (final Link link : newLink) {
-            final String rel = link.getRel();
-            if (!this.links.containsKey(rel)) {
-                this.links.put(rel, new ArrayList<Link>());
+            final String relation = link.getRel();
+            if (!this.links.containsKey(relation)) {
+                this.links.put(relation, new ArrayList<Link>());
             }
-            this.links.get(rel).add(link);
+            this.links.get(relation).add(link);
         }
 
         return this;

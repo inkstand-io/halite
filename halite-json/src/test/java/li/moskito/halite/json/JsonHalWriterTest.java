@@ -60,7 +60,7 @@ public class JsonHalWriterTest {
     protected void assertJsonDataEquals(final String expected) throws JSONException {
         final String actual = getData();
         LOG.info("Comparing expected {} with actual {}", expected, actual);
-        JSONAssert.assertEquals(expected, actual, false);
+        JSONAssert.assertEquals(expected, actual, true);
     }
 
     /**
@@ -93,7 +93,7 @@ public class JsonHalWriterTest {
     }
 
     @Test
-    public void testWrite_resource() throws Exception {
+    public void testWrite_resource_defaultOptions() throws Exception {
         final ResourcePojo pojo = createResourcePojo("aName", 1234, 12.34);
         pojo.addLink(createLink("rel1", "http://test1", "aName1", "aTitle1", "aType1"));
         pojo.addLink(createLink("rel2", "http://test2", "aName2", "aTitle2", "aType2"));
@@ -110,9 +110,57 @@ public class JsonHalWriterTest {
                 + "\"pojo\": {"
                 + "\"_links\": { \"self\": {\"href\":\"pojo\"}},"
                 + "\"name\":\"test\", \"size\":1234,  \"scale\":12.34}"
-                + "}"
+                + "},"
+                + "\"name\":\"aName\", \"size\":1234,  \"scale\":12.34}"
                 + "}";
         assertJsonDataEquals(expected);
+        assertFalse(this.generator.isClosed());
+    }
+
+    @Test
+    public void testWrite_resource_closeOnWrite() throws Exception {
+
+        final ResourcePojo pojo = createResourcePojo("aName", 1234, 12.34);
+        pojo.addLink(createLink("rel1", "http://test1", "aName1", "aTitle1", "aType1"));
+        pojo.addLink(createLink("rel2", "http://test2", "aName2", "aTitle2", "aType2"));
+        pojo.embed("pojo", createResourcePojo("test", 1234, 12.34));
+
+        this.subject.setOption(Option.CLOSE_ON_WRITE_RESOURCE, true);
+        this.subject.write(pojo);
+        final String expected = "{"
+                + "\"_links\": { "
+                + "\"self\": {\"href\":\"pojo\"},"
+                + "\"rel1\": {\"name\":\"aName1\", \"title\":\"aTitle1\",  \"href\":\"http://test1\", \"type\":\"aType1\"},"
+                + "\"rel2\": {\"name\":\"aName2\", \"title\":\"aTitle2\",  \"href\":\"http://test2\", \"type\":\"aType2\"} "
+                + "},"
+                + "\"_embedded\": {"
+                + "\"pojo\": {"
+                + "\"_links\": { \"self\": {\"href\":\"pojo\"}},"
+                + "\"name\":\"test\", \"size\":1234,  \"scale\":12.34}"
+                + "},"
+                + "\"name\":\"aName\", \"size\":1234,  \"scale\":12.34}"
+                + "}";
+        assertJsonDataEquals(expected);
+        assertTrue(this.generator.isClosed());
+
+    }
+
+    @Test
+    public void testWrite_resource_writeNulls() throws Exception {
+        final ResourcePojo pojo = createResourcePojo("aName", 1234, 12.34);
+
+        this.subject.setOption(Option.WRITE_NULLS, true);
+        this.subject.write(pojo);
+        final String expected = "{"
+                + "\"_links\": { "
+                + "\"self\": {\"href\":\"pojo\", "
+                + "\"hreflang\":null, \"deprecation\":null, \"name\":null, "
+                + "\"profile\":null, \"templated\":null, \"title\":null, \"type\":null},"
+                + "},"
+                + "\"name\":\"aName\", \"size\":1234,  \"scale\":12.34, \"option\":null"
+                + "}";
+        assertJsonDataEquals(expected);
+        assertFalse(this.generator.isClosed());
     }
 
     @Test
@@ -125,7 +173,7 @@ public class JsonHalWriterTest {
         this.generator.flush();
 
         // links are written, because write empty links is default
-        final String expected = "{ \"_links\":{}}";
+        final String expected = "{ \"_links\":{ \"self\": {\"href\":\"resource\"}}}";
         assertJsonDataEquals(expected);
     }
 
@@ -139,7 +187,7 @@ public class JsonHalWriterTest {
         this.generator.flush();
 
         // links are written, because write empty links is default
-        final String expected = "{ }";
+        final String expected = "{ \"_links\": {\"self\": {\"href\": \"resource\"}} }";
         assertJsonDataEquals(expected);
     }
 
@@ -296,23 +344,7 @@ public class JsonHalWriterTest {
         this.generator.writeEndObject();
         this.generator.flush();
 
-        final String expected = "{\"_links\":{}}";
-
-        assertJsonDataEquals(expected);
-    }
-
-    @Test
-    public void testWriteLinks_emptyLinks_emptyLinksDisabled() throws Exception {
-        this.subject.setOption(Option.WRITE_EMPTY_LINKS, false);
-
-        final Resource res = createResource();
-
-        this.generator.writeStartObject();
-        this.subject.writeLinks(res);
-        this.generator.writeEndObject();
-        this.generator.flush();
-
-        final String expected = "{}";
+        final String expected = "{\"_links\":{ \"self\": {\"href\":\"resource\"}}}";
 
         assertJsonDataEquals(expected);
     }
@@ -328,6 +360,7 @@ public class JsonHalWriterTest {
         this.generator.flush();
 
         final String expected = "{\"_links\":{ "
+                + "\"self\" : { \"href\": \"resource\"},"
                 + "\"rel\" : { \"href\": \"http://abc.test.com\", \"name\":\"link\", \"title\":\"Title\",\"type\":\"json\"}"
                 + "}}";
 
@@ -348,6 +381,7 @@ public class JsonHalWriterTest {
         this.generator.flush();
 
         final String expected = "{\"_links\":{ "
+                + "\"self\" : { \"href\": \"resource\"},"
                 + "\"rel\" : [{ \"href\": \"http://ref.test.com\", \"name\":\"shop\", \"title\":\"Title1\",\"type\":\"json\"},"
                 + "           { \"href\": \"http://ref.test.org\", \"name\":\"form\", \"title\":\"Title2\",\"type\":\"html\"}],"
                 + "\"abc\" :  { \"href\": \"http://abc.test.com\", \"name\":\"link\", \"title\":\"Title3\",\"type\":\"text\"},"
@@ -425,6 +459,12 @@ public class JsonHalWriterTest {
         assertFalse((Boolean) this.subject.getOption(Option.WRITE_NULLS));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetOption_invalidOption() throws Exception {
+        // Write Nulls is a boolean option
+        this.subject.setOption(Option.WRITE_NULLS, "true");
+    }
+
     /**
      * All the Options are set by default
      * 
@@ -434,7 +474,6 @@ public class JsonHalWriterTest {
     public void testIsSetOption_defaultOptions_true() throws Exception {
         assertTrue(this.subject.isSetOption(Option.WRITE_NULLS));
         assertTrue(this.subject.isSetOption(Option.WRITE_EMPTY_EMBEDDED));
-        assertTrue(this.subject.isSetOption(Option.WRITE_EMPTY_LINKS));
         assertTrue(this.subject.isSetOption(Option.CLOSE_ON_WRITE_RESOURCE));
     }
 
@@ -453,7 +492,6 @@ public class JsonHalWriterTest {
     public void testGetOption_defaultValues() throws Exception {
         assertFalse((Boolean) this.subject.getOption(Option.WRITE_NULLS));
         assertFalse((Boolean) this.subject.getOption(Option.WRITE_EMPTY_EMBEDDED));
-        assertTrue((Boolean) this.subject.getOption(Option.WRITE_EMPTY_LINKS));
         assertFalse((Boolean) this.subject.getOption(Option.CLOSE_ON_WRITE_RESOURCE));
     }
 
@@ -580,6 +618,10 @@ public class JsonHalWriterTest {
         private String name;
         private int size;
         private double scale;
+        /**
+         * The option field is intendended not to be populated by the test to test the write-nulls behavior
+         */
+        private String option;
 
         public void setName(final String name) {
             this.name = name;
@@ -603,6 +645,14 @@ public class JsonHalWriterTest {
 
         public double getScale() {
             return scale;
+        }
+
+        public String getOption() {
+            return option;
+        }
+
+        public void setOption(final String option) {
+            this.option = option;
         }
 
     }
