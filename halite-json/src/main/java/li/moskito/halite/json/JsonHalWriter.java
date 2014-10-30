@@ -148,18 +148,12 @@ public class JsonHalWriter {
      */
     public void write(final Object resource) throws IOException {
 
-        writeObject(resource);
+        writeObjectValue(resource);
         if (getOption(Option.CLOSE_ON_WRITE_RESOURCE)) {
             json.close();
         } else {
             json.flush();
         }
-    }
-
-    private void writeObject(final Object resource) throws IOException {
-        json.writeStartObject();
-        writeObjectValue(resource);
-        json.writeEndObject();
     }
 
     private void writeObject(final String name, final Object resource) throws IOException {
@@ -182,12 +176,14 @@ public class JsonHalWriter {
 
         Class<?> type = resource.getClass();
         if (Resource.class.isAssignableFrom(type)) {
+            json.writeStartObject();
             // render _links and _embedded
             writeLinks((Resource) resource);
             writeEmbedded((Resource) resource);
             while (!Object.class.equals(type) && !Resource.class.equals(type)) {
                 type = writeFieldsOfType(type, resource);
             }
+            json.writeEndObject();
             json.flush();
         } else {
             json.writeObject(resource);
@@ -209,10 +205,6 @@ public class JsonHalWriter {
      */
     @SuppressWarnings("rawtypes")
     private Class writeFieldsOfType(final Class<?> type, final Object resource) throws IOException {
-        assert type != null : "type must not be null";
-        assert !type.equals(Object.class) : "type must not be " + Object.class;
-        assert resource != null : "resource must not be null";
-        assert resource.getClass().isAssignableFrom(type) : "type must be of the same type or a supertype of the resource";
 
         for (final Field f : type.getDeclaredFields()) {
 
@@ -251,7 +243,7 @@ public class JsonHalWriter {
         if (Collection.class.isAssignableFrom(fieldType)) {
             json.writeArrayFieldStart(fieldName);
             for (final Object object : (Collection<?>) fieldValue) {
-                writeObject(object);
+                writeObjectValue(object);
             }
             json.writeEndArray();
         } else if (Resource.class.isAssignableFrom(fieldType)) {
@@ -314,7 +306,6 @@ public class JsonHalWriter {
      * @throws IOException
      */
     public void writeEmbedded(final String rel, final List<Resource> resources) throws IOException {
-        assert !resources.isEmpty() : "link list must not be empty";
 
         final boolean isArray = resources.size() > 1;
 
@@ -323,7 +314,7 @@ public class JsonHalWriter {
             json.writeStartArray();
         }
         for (final Resource resource : resources) {
-            writeObject(resource);
+            writeObjectValue(resource);
         }
         if (isArray) {
             json.writeEndArray();
@@ -361,7 +352,6 @@ public class JsonHalWriter {
      * @throws IOException
      */
     public void writeLink(final String rel, final List<Link> relLinks) throws IOException {
-        assert !relLinks.isEmpty() : "link list must not be empty";
 
         final boolean isArray = relLinks.size() > 1;
 
@@ -404,7 +394,6 @@ public class JsonHalWriter {
     }
 
     public void setOption(final Option option, final Object value) {
-        assert value != null : "value must not be null";
         option.validate(value);
         this.options.put(option, value);
     }

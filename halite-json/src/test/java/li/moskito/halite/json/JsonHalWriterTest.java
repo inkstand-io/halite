@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -175,13 +176,78 @@ public class JsonHalWriterTest {
     }
 
     @Test
+    public void testWrite_resource_writeStringLists() throws Exception {
+        final ListPojo pojo = createListPojo("one", "two", "three");
+
+        this.subject.write(pojo);
+        final String expected = "{"
+                + "\"_links\": { "
+                + "  \"self\": {\"href\":\"list\"}},"
+                + "\"list\": [\"one\", \"two\", \"three\"]"
+                + "}";
+        assertJsonDataEquals(expected);
+    }
+
+    @Test
+    public void testWrite_resource_writeIntegerLists() throws Exception {
+        final ListPojo pojo = createListPojo(1, 2, 3);
+
+        this.subject.write(pojo);
+        final String expected = "{"
+                + "\"_links\": { "
+                + "  \"self\": {\"href\":\"list\"}},"
+                + "\"list\": [1, 2, 3]"
+                + "}";
+        assertJsonDataEquals(expected);
+    }
+
+    @Test
+    public void testWrite_resource_writeBooleanLists() throws Exception {
+        final ListPojo pojo = createListPojo(true, true, false);
+
+        this.subject.write(pojo);
+        final String expected = "{"
+                + "\"_links\": { "
+                + "  \"self\": {\"href\":\"list\"}},"
+                + "\"list\": [true, true, false]"
+                + "}";
+        assertJsonDataEquals(expected);
+    }
+
+    @Test
+    public void testWrite_resource_writeDoubleLists() throws Exception {
+        final ListPojo pojo = createListPojo(1.2, 3.4, 5.6);
+
+        this.subject.write(pojo);
+        final String expected = "{"
+                + "\"_links\": { "
+                + "  \"self\": {\"href\":\"list\"}},"
+                + "\"list\": [1.2, 3.4, 5.6]"
+                + "}";
+        assertJsonDataEquals(expected);
+    }
+
+    @Test
+    public void testWrite_resource_writePojoLists() throws Exception {
+
+        final ListPojo pojo = createListPojo(createSimplePojo("a", 1, 1.2), createSimplePojo("b", 2, 3.4));
+
+        this.subject.write(pojo);
+        final String expected = "{"
+                + "\"_links\": { "
+                + "  \"self\": {\"href\":\"list\"}},"
+                + "\"list\": ["
+                + "{\"name\":\"a\", \"size\":1, \"scale\":1.2},"
+                + "{\"name\":\"b\", \"size\":2, \"scale\":3.4}]"
+                + "}";
+        assertJsonDataEquals(expected);
+    }
+
+    @Test
     public void testWriteObjectValue_emptyResource_withDefaults() throws Exception {
         final Resource res = createResource();
 
-        this.generator.writeStartObject();
         this.subject.writeObjectValue(res);
-        this.generator.writeEndObject();
-        this.generator.flush();
 
         // links are written, because write empty links is default
         final String expected = "{ \"_links\":{ \"self\": {\"href\":\"resource\"}}}";
@@ -192,10 +258,7 @@ public class JsonHalWriterTest {
     public void testWriteObjectValue_emptyResource_noWriteEmptyLinks() throws Exception {
         final Resource res = createResource();
 
-        this.generator.writeStartObject();
         this.subject.writeObjectValue(res);
-        this.generator.writeEndObject();
-        this.generator.flush();
 
         // links are written, because write empty links is default
         final String expected = "{ \"_links\": {\"self\": {\"href\": \"resource\"}} }";
@@ -207,10 +270,7 @@ public class JsonHalWriterTest {
         this.subject.setOption(Option.WRITE_EMPTY_EMBEDDED, true);
         final Resource res = createResource();
 
-        this.generator.writeStartObject();
         this.subject.writeObjectValue(res);
-        this.generator.writeEndObject();
-        this.generator.flush();
 
         // links are written, because write empty links is default
         final String expected = "{ \"_links\":{ \"self\":{\"href\":\"resource\"}},\"_embedded\":{} }";
@@ -402,17 +462,6 @@ public class JsonHalWriterTest {
         assertJsonDataEquals(expected);
     }
 
-    @Test(expected = AssertionError.class)
-    public void testWriteLink_emptyLink() throws Exception {
-        final List<Link> relLinks = new ArrayList<>();
-
-        // we have to embedd the call in an object, otherwise the link would not be created
-        // as "rel" : { ... }, the colon : would be missing
-        generator.writeStartObject();
-        subject.writeLink("abc", relLinks);
-        generator.writeEndObject();
-    }
-
     @Test
     public void testWriteLink_singleLink() throws Exception {
         final List<Link> relLinks = new ArrayList<>();
@@ -525,11 +574,27 @@ public class JsonHalWriterTest {
         return HAL.newResource("resource");
     }
 
+    private SimplePojo createSimplePojo(final String name, final int size, final double scale) {
+        final SimplePojo pojo = new SimplePojo();
+        pojo.setName(name);
+        pojo.setSize(size);
+        pojo.setScale(scale);
+        return pojo;
+
+    }
+
     private ResourcePojo createResourcePojo(final String name, final int size, final double scale) {
         final ResourcePojo pojo = new ResourcePojo();
         pojo.setName(name);
         pojo.setSize(size);
         pojo.setScale(scale);
+        return pojo;
+
+    }
+
+    private ListPojo createListPojo(final Object... entries) {
+        final ListPojo pojo = new ListPojo();
+        pojo.getList().addAll(Arrays.asList(entries));
         return pojo;
 
     }
@@ -664,6 +729,37 @@ public class JsonHalWriterTest {
 
         public void setOption(final String option) {
             this.option = option;
+        }
+
+    }
+
+    /**
+     * A POJO extending a resource with a collection field
+     * 
+     * @author gmuecke
+     * 
+     */
+    public static class ListPojo extends Resource {
+
+        public ListPojo() {
+            super("list");
+        }
+
+        private List<Object> list = new ArrayList<>();
+
+        /**
+         * @return the list
+         */
+        public List<Object> getList() {
+            return list;
+        }
+
+        /**
+         * @param list
+         *            the list to set
+         */
+        public void setList(final List<Object> list) {
+            this.list = list;
         }
 
     }
