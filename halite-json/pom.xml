@@ -1,31 +1,28 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>li.moskito</groupId>
 		<artifactId>halite</artifactId>
 		<version>0.0.14-SNAPSHOT</version>
 	</parent>
+
 	<artifactId>halite-json</artifactId>
-	<name>halite-json</name>
+	<name>${project.groupId}:${project.artifactId}</name>
 	<description>JSON generation support for the HAL specification</description>
 
-
-	<properties>
-		<javax.javaee.version>6.0</javax.javaee.version>
-		<javax.json.version>1.0.4</javax.json.version>
-	</properties>
-
 	<dependencies>
-		<!-- TODO as javax.json has become part of JEE7, provide a profile for JEE7 that adds a JEE7 dependency instead -->
-
-		<!-- <dependency> <groupId>org.glassfish</groupId> <artifactId>javax.json</artifactId> <version>${javax.json.version}</version> 
-			</dependency> -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>2.4.3</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.skyscreamer</groupId>
+			<artifactId>jsonassert</artifactId>
+			<version>1.2.3</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>li.moskito</groupId>
 			<artifactId>halite-model</artifactId>

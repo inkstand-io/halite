@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>li.moskito</groupId>
@@ -66,7 +67,20 @@
 
 	<profiles>
 		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<surefireArgLine />
+				<tests.json.strict.validation.disabled>false</tests.json.strict.validation.disabled>
+			</properties>
+		</profile>
+		<profile>
 			<id>qa</id>
+			<properties>
+				<tests.json.strict.validation.disabled>true</tests.json.strict.validation.disabled>
+			</properties>
 			<build>
 				<plugins>
 					<plugin>
@@ -76,11 +90,8 @@
 						<configuration>
 							<skip>${skipTests}</skip>
 							<includes>
-								<include>org.halite.*</include>
+								<include>li.moskito.halite.*</include>
 							</includes>
-							<excludes>
-								<exclude>org.halite.model.*</exclude>
-							</excludes>
 						</configuration>
 						<executions>
 							<execution>
@@ -258,17 +269,15 @@
 					<runOrder>random</runOrder>
 					<enableAssertions>true</enableAssertions>
 					<argLine>-Xms16M -Xmx512M ${surefireArgLine}</argLine>
+					<systemPropertyVariables>
+						<tests.json.strict.validation.disabled>${tests.json.strict.validation.disabled}</tests.json.strict.validation.disabled>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
-
-
-
-
 		</plugins>
 	</build>
 
 	<modules>
-		<module>halite-model</module>
 		<module>halite-core</module>
 		<module>halite-json</module>
 		<module>halite-xml</module>
