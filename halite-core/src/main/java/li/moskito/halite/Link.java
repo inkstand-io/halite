@@ -1,4 +1,4 @@
-package li.moskito.halite.model;
+package li.moskito.halite;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

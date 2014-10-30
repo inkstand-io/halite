@@ -1,14 +1,13 @@
 package li.moskito.halite;
 
-import li.moskito.halite.model.Link;
-import li.moskito.halite.model.ObjectFactory;
-import li.moskito.halite.model.Resource;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Standard links according to HAL conventions
  * 
  * @author gmuecke
  */
+@XmlTransient
 public final class HAL {
 
     /**

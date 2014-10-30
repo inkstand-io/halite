@@ -1,23 +1,21 @@
 /**
  * Implementation of the HAL specification.<br>
- * The core of the HAL implementation is the HAL model (halite-model) consisting of JAXB generated classes. The classes
- * can be used standalone as well as being extended to add additional functionality. To create links more conveniently
- * or create {@link li.moskito.halite.model.Resource} or Resource wrappers the {@link li.moskito.halite.HAL} class provides methods to
- * create according adapters.<br>
- * The real value in those data types lies in the JsonWriter (halite-json) which allows to create proper Json structures
- * from the Java types.<br>
+ * The core of the HAL implementation are the {@link li.moskito.halite.Resource} and the {@link li.moskito.halite.Link}
+ * classes. Both are compatible for marshalling/unmarshalling with JAXB. To create a custom Resource model, simply
+ * extend the {@link li.moskito.halite.Resource} class or extend the schema types are generate your own classes.
+ * 
  * Code Example for creating links:<br>
  * Add a self link to a resource
  * 
  * <pre>
  * Resource res = ...; 
- * HAL.newLink(res, HAL.SELF, "http://...").title("Self-Link");
+ * HAL.newLink(res, HAL.NEXT, &quot;http://...&quot;).title(&quot;Next page&quot;);
  * </pre>
  * 
  * Create a new Resource and add a link
  * 
  * <pre>
- * HAL.newResource().addLink(&quot;next&quot;, &quot;page=3&quot;);
+ * HAL.newResource(&quot;someUri&quot;).addLink(&quot;next&quot;, &quot;page=3&quot;);
  * </pre>
  * 
  * Adding a link to many Resources
@@ -26,7 +24,9 @@
  * Resource r1 = ...;
  * Resource r2 = ...;
  * Resource r3 = ...;
- * HAL.newLink("home", "http://...").title("Home").addTo(r1).addTo(r2).addTo(r3);
+ * HAL.newLink(&quot;home&quot;, &quot;http://...&quot;).title("Home").addTo(r1, r2, r3);
  * </pre>
  */
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://moskito.li/schemas/halite/v1")
 package li.moskito.halite;
+

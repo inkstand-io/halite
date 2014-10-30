@@ -1,18 +1,76 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>li.moskito</groupId>
-    <artifactId>halite</artifactId>
-    <version>0.0.14-SNAPSHOT</version>
-  </parent>
-  <artifactId>halite-core</artifactId>
-  <name>halite-core</name>
-  <description>Implementation of the HAL specification</description>
-  <dependencies>
-  	<dependency>
-  		<groupId>li.moskito</groupId>
-  		<artifactId>halite-model</artifactId>
-  		<version>0.0.14-SNAPSHOT</version>
-  	</dependency>
-  </dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>li.moskito</groupId>
+		<artifactId>halite</artifactId>
+		<version>0.0.14-SNAPSHOT</version>
+	</parent>
+	
+	<artifactId>halite-core</artifactId>
+	<name>halite-core</name>
+	<description>Base classes implementing the HAL specification.</description>
+	
+	<dependencies>
+		<dependency>
+			<groupId>xmlunit</groupId>
+			<artifactId>xmlunit</artifactId>
+			<version>1.5</version>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>schemagen</id>
+						<goals>
+							<goal>schemagen</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<transformSchemas>
+						<transformSchema>
+							<uri>http://moskito.li/schemas/halite/v1</uri>
+							<toPrefix>hal</toPrefix>
+							<toFile>li.moskito.halite.v1.xsd</toFile>
+						</transformSchema>
+					</transformSchemas>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+					<outputDirectory>${project.build.directory}/generated-resources/schemas</outputDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.outputDirectory}/META-INF/schema</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.build.directory}/generated-resources/schemas</directory>
+									<includes>
+										<include>**/*.xsd</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -5,7 +5,7 @@
 // Generated on: 2014.10.27 at 03:31:34 PM CET
 //
 
-package li.moskito.halite.model;
+package li.moskito.halite;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;

@@ -1,4 +1,4 @@
-package li.moskito.halite.model;
+package li.moskito.halite;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -144,7 +144,7 @@ public class Resource {
         try {
             return new URI(sUri);
         } catch (final URISyntaxException e) {
-            throw new InvalidUriException(sUri, e);
+            throw new RuntimeException(sUri + " is no valid URI", e); // NOSONAR
         }
     }
 

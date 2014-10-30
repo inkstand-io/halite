@@ -3,8 +3,6 @@ package li.moskito.halite;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import li.moskito.halite.HAL;
-import li.moskito.halite.model.Link;
-import li.moskito.halite.model.Resource;
 
 import org.junit.Test;
 

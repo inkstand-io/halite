@@ -1,4 +1,4 @@
-package li.moskito.halite.model;
+package li.moskito.halite;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathEvaluatesTo;
 import static org.junit.Assert.assertEquals;
@@ -14,6 +14,10 @@ import javax.xml.bind.JAXB;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
+
+import li.moskito.halite.Link;
+import li.moskito.halite.ObjectFactory;
+import li.moskito.halite.Resource;
 
 import org.junit.Before;
 import org.junit.Test;
