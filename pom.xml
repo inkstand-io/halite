@@ -72,11 +72,15 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-					<surefireArgLine />
+				<surefireArgLine />
+				<tests.json.strict.validation.disabled>false</tests.json.strict.validation.disabled>
 			</properties>
 		</profile>
 		<profile>
 			<id>qa</id>
+			<properties>
+				<tests.json.strict.validation.disabled>true</tests.json.strict.validation.disabled>
+			</properties>
 			<build>
 				<plugins>
 					<plugin>
@@ -265,6 +269,9 @@
 					<runOrder>random</runOrder>
 					<enableAssertions>true</enableAssertions>
 					<argLine>-Xms16M -Xmx512M ${surefireArgLine}</argLine>
+					<systemPropertyVariables>
+						<tests.json.strict.validation.disabled>${tests.json.strict.validation.disabled}</tests.json.strict.validation.disabled>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -18,6 +18,7 @@ import li.moskito.halite.json.JsonHalWriter.Option;
 
 import org.json.JSONException;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -40,6 +41,15 @@ public class JsonHalWriterTest {
     private ByteArrayOutputStream outputStream;
     private JsonHalWriter subject;
 
+    private static boolean STRICT_MODE;
+
+    @BeforeClass
+    public static void setOptions() {
+        STRICT_MODE = !Boolean.getBoolean("tests.json.strict.validation.disabled");
+        LOG.info("Using strict JSON validation: {}", STRICT_MODE);
+
+    }
+
     @Before
     public void setUp() throws Exception {
         this.outputStream = new ByteArrayOutputStream();
@@ -60,7 +70,8 @@ public class JsonHalWriterTest {
     protected void assertJsonDataEquals(final String expected) throws JSONException {
         final String actual = getData();
         LOG.info("Comparing expected {} with actual {}", expected, actual);
-        JSONAssert.assertEquals(expected, actual, true);
+        // strict mode has to be disabled for jacoco builds, otherwise the tests will fail
+        JSONAssert.assertEquals(expected, actual, STRICT_MODE);
     }
 
     /**
