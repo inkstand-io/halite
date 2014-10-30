@@ -131,6 +131,24 @@ public class ResourceTest {
     }
 
     @Test
+    public void testEmbedStringResourceArray_singleResources_consecutiveCall() throws Exception {
+        // prepare
+        final Resource r1 = new Resource("r1");
+        final Resource r2 = new Resource("r2");
+        // act
+        assertEquals(this.subject, this.subject.embed("next", r1));
+        assertEquals(this.subject, this.subject.embed("next", r2));
+        // assert
+        // act
+        final List<Resource> nexts = this.subject.getEmbedded("next");
+        // assert
+        assertNotNull(nexts);
+        assertEquals(2, nexts.size());
+        assertTrue(nexts.contains(r1));
+        assertTrue(nexts.contains(r2));
+    }
+
+    @Test
     public void testEmbedStringResourceArray_multipleResources() throws Exception {
         // prepare
         final Resource r1 = new Resource("r1");
@@ -229,7 +247,7 @@ public class ResourceTest {
     }
 
     @Test
-    public void testGetLink_existing() throws Exception {
+    public void testGetLinkStringString_existing() throws Exception {
         // prepare
         final List<Link> newLinks = new ArrayList<>();
         final Link link1 = factory.createLink("other", "http://test.com").name("this");
@@ -250,10 +268,56 @@ public class ResourceTest {
     }
 
     @Test
-    public void testGetLink_notExisting() throws Exception {
+    public void testGetLinkStringString_notExistingRelAndName() throws Exception {
         // act
         assertNull(this.subject.getLink("other", "this"));
 
+    }
+
+    @Test
+    public void testGetLinkStringString_notExistingName() throws Exception {
+        // prepare
+        final List<Link> newLinks = new ArrayList<>();
+        final Link link1 = factory.createLink("other", "http://test.com").name("this");
+        newLinks.add(link1);
+        this.subject.setLinks(newLinks);
+        // act
+        assertNull(this.subject.getLink("other", "that"));
+
+    }
+
+    @Test
+    public void testGetLinkStringString_notExisting_UnsetName() throws Exception {
+        // prepare
+        final List<Link> newLinks = new ArrayList<>();
+        final Link link1 = factory.createLink("other", "http://test.com");
+        newLinks.add(link1);
+        this.subject.setLinks(newLinks);
+        // act
+        assertNull(this.subject.getLink("other", "that"));
+
+    }
+
+    @Test
+    public void testGetLinkString_existing() throws Exception {
+        final Link self = this.subject.getLink("self");
+        assertNotNull(self);
+        assertEquals("self", self.getRel());
+    }
+
+    @Test
+    public void testGetLinkString_notExisting() throws Exception {
+        final Link self = this.subject.getLink("other");
+        assertNull(self);
+    }
+
+    @Test
+    public void testGetLinkString_noUnnamedLink() throws Exception {
+        // create a link with name
+        this.subject.addLink("other", "someUri").name("someName");
+        // the method does not return links which are named
+        final Link self = this.subject.getLink("other");
+        assertNull(self);
     }
 
     @Test

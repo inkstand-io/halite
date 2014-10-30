@@ -106,8 +106,8 @@ public class JsonHalWriterTest {
 
     @Test
     public void testWrite_resource_defaultOptions() throws Exception {
-        final ResourcePojo pojo = createResourcePojo("aName", 1234, 12.34);
-        pojo.addLink(createLink("rel1", "http://test1", "aName1", "aTitle1", "aType1"));
+        final ResourcePojo pojo = createResourcePojo("aName", 5678, 56.78);
+        pojo.addLink(createLink("rel1", "http://test1", "aName1", "aTitle1", "aType1").templated(true));
         pojo.addLink(createLink("rel2", "http://test2", "aName2", "aTitle2", "aType2"));
         pojo.embed("pojo", createResourcePojo("test", 1234, 12.34));
 
@@ -115,7 +115,7 @@ public class JsonHalWriterTest {
         final String expected = "{"
                 + "\"_links\": { "
                 + "\"self\": {\"href\":\"pojo\"},"
-                + "\"rel1\": {\"name\":\"aName1\", \"title\":\"aTitle1\",  \"href\":\"http://test1\", \"type\":\"aType1\"},"
+                + "\"rel1\": {\"name\":\"aName1\", \"title\":\"aTitle1\",  \"href\":\"http://test1\", \"type\":\"aType1\", \"templated\":true},"
                 + "\"rel2\": {\"name\":\"aName2\", \"title\":\"aTitle2\",  \"href\":\"http://test2\", \"type\":\"aType2\"} "
                 + "},"
                 + "\"_embedded\": {"
@@ -123,7 +123,7 @@ public class JsonHalWriterTest {
                 + "\"_links\": { \"self\": {\"href\":\"pojo\"}},"
                 + "\"name\":\"test\", \"size\":1234,  \"scale\":12.34}"
                 + "},"
-                + "\"name\":\"aName\", \"size\":1234,  \"scale\":12.34}"
+                + "\"name\":\"aName\", \"size\":5678,  \"scale\":56.78"
                 + "}";
         assertJsonDataEquals(expected);
         assertFalse(this.generator.isClosed());
@@ -169,7 +169,7 @@ public class JsonHalWriterTest {
                 + "\"hreflang\":null, \"deprecation\":null, \"name\":null, "
                 + "\"profile\":null, \"templated\":null, \"title\":null, \"type\":null},"
                 + "},"
-                + "\"name\":\"aName\", \"size\":1234,  \"scale\":12.34, \"option\":null"
+                + "\"name\":\"aName\", \"size\":1234,  \"scale\":12.34, \"option\":null,"
                 + "}";
         assertJsonDataEquals(expected);
         assertFalse(this.generator.isClosed());
@@ -244,6 +244,21 @@ public class JsonHalWriterTest {
     }
 
     @Test
+    public void testWrite_resource_writeComplexResource() throws Exception {
+
+        final ComplexResource resource = new ComplexResource();
+        resource.setResource(new Resource("child"));
+
+        this.subject.write(resource);
+        final String expected = "{"
+                + "\"_links\" : {\"self\" : {\"href\" : \"complexResource\"}},"
+                + "\"resource\" : { "
+                + "  \"_links\" : {\"self\" : {\"href\" : \"child\"}"
+                + "}}}";
+        assertJsonDataEquals(expected);
+    }
+
+    @Test
     public void testWriteObjectValue_emptyResource_withDefaults() throws Exception {
         final Resource res = createResource();
 
@@ -284,10 +299,7 @@ public class JsonHalWriterTest {
      */
     @Test
     public void testWriteObjectValue_pojo() throws Exception {
-        final SimplePojo pojo = new SimplePojo();
-        pojo.setName("Test");
-        pojo.setSize(1234);
-        pojo.setScale(12.34);
+        final SimplePojo pojo = createSimplePojo("Test", 1234, 12.34);
 
         this.subject.writeObjectValue(pojo);
 
@@ -729,6 +741,31 @@ public class JsonHalWriterTest {
 
         public void setOption(final String option) {
             this.option = option;
+        }
+
+    }
+
+    public static class ComplexResource extends Resource {
+
+        public ComplexResource() {
+            super("complexResource");
+        }
+
+        private Resource resource;
+
+        /**
+         * @return the resource
+         */
+        public Resource getResource() {
+            return resource;
+        }
+
+        /**
+         * @param resource
+         *            the resource to set
+         */
+        public void setResource(final Resource resource) {
+            this.resource = resource;
         }
 
     }

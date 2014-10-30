@@ -156,12 +156,6 @@ public class JsonHalWriter {
         }
     }
 
-    private void writeObject(final String name, final Object resource) throws IOException {
-        json.writeObjectFieldStart(name);
-        writeObjectValue(resource);
-        json.writeEndObject();
-    }
-
     /**
      * Writes an object by writing its fields. If the object is a HAL {@link Resource} (or a subtype of it), the _links
      * and _embedded fields are written.
@@ -174,15 +168,10 @@ public class JsonHalWriter {
      */
     public void writeObjectValue(final Object resource) throws IOException {
 
-        Class<?> type = resource.getClass();
+        final Class<?> type = resource.getClass();
         if (Resource.class.isAssignableFrom(type)) {
             json.writeStartObject();
-            // render _links and _embedded
-            writeLinks((Resource) resource);
-            writeEmbedded((Resource) resource);
-            while (!Object.class.equals(type) && !Resource.class.equals(type)) {
-                type = writeFieldsOfType(type, resource);
-            }
+            writeResourceValue(resource, type);
             json.writeEndObject();
             json.flush();
         } else {
@@ -190,6 +179,15 @@ public class JsonHalWriter {
             json.flush();
         }
 
+    }
+
+    private void writeResourceValue(final Object resource, Class<?> type) throws IOException {
+        // render _links and _embedded
+        writeLinks((Resource) resource);
+        writeEmbedded((Resource) resource);
+        while (!Resource.class.equals(type)) {
+            type = writeFieldsOfType(type, resource);
+        }
     }
 
     /**
@@ -247,7 +245,9 @@ public class JsonHalWriter {
             }
             json.writeEndArray();
         } else if (Resource.class.isAssignableFrom(fieldType)) {
-            writeObject(fieldName, fieldValue);
+            json.writeObjectFieldStart(fieldName);
+            writeResourceValue(fieldValue, fieldType);
+            json.writeEndObject();
         } else {
             json.writeFieldName(fieldName);
             json.writeObject(fieldValue);
