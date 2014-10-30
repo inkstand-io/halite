@@ -38,17 +38,19 @@ public class JAXBTest {
 
     @Test
     public void testMarshalling_simpleResource() throws Exception {
-        final Resource res = factory.createResource();
+        final Resource res = factory.createResource("parent");
         res.addLink(createLink("self", "http://test.com", "aName", "aTitle", "aType"));
-        res.embed("other", factory.createResource());
+        res.embed("other", factory.createResource("child"));
 
         final Document document = marshall(res);
         assertXpathEvaluatesTo("other", "/resource/embedded/@rel", document);
         assertXpathEvaluatesTo("self", "/resource/link/@rel", document);
-        assertXpathEvaluatesTo("http://test.com", "/resource/link/@href", document);
+        assertXpathEvaluatesTo("parent", "/resource/link/@href", document);
+        assertXpathEvaluatesTo("http://test.com", "/resource/link[@name='aName']/@href", document);
         assertXpathEvaluatesTo("aName", "/resource/link/@name", document);
         assertXpathEvaluatesTo("aTitle", "/resource/link/@title", document);
         assertXpathEvaluatesTo("aType", "/resource/link/@type", document);
+        assertXpathEvaluatesTo("child", "/resource/embedded[@rel='other']/link[@rel='self']/@href", document);
 
     }
 
@@ -103,9 +105,7 @@ public class JAXBTest {
      */
     private Link createLink(final String rel, final String href, final String name, final String title,
             final String type) {
-        final Link link = factory.createLink();
-        link.rel(rel);
-        link.href(href);
+        final Link link = factory.createLink(rel, href);
         link.name(name);
         link.title(title);
         link.type(type);

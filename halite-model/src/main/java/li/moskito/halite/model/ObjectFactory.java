@@ -39,16 +39,16 @@ public class ObjectFactory {
      * Create an instance of {@link Resource }
      * 
      */
-    public Resource createResource() {
-        return new Resource();
+    public Resource createResource(final String uri) {
+        return new Resource(uri);
     }
 
     /**
      * Create an instance of {@link Link }
      * 
      */
-    public Link createLink() {
-        return new Link();
+    public Link createLink(final String rel, final String href) {
+        return new Link(rel, href);
     }
 
     /**

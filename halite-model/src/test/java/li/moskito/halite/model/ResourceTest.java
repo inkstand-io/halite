@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +16,13 @@ import org.junit.Test;
 public class ResourceTest {
 
     private Resource subject;
+    private ObjectFactory factory;
 
     @Before
     public void setUp() throws Exception {
-        this.subject = createResource();
+        this.factory = new ObjectFactory();
+        this.subject = factory.createResource("resource");
+
     }
 
     @Test
@@ -31,13 +35,13 @@ public class ResourceTest {
     public void testSetEmbedded_GetEmbedded() throws Exception {
         // initial set
         final List<Resource> resources = new ArrayList<>();
-        resources.add(createResource("rel"));
+        resources.add(createResource("rel", "child"));
         this.subject.setEmbedded(resources);
         assertEquals(resources, this.subject.getEmbedded());
 
         // link override
         final List<Resource> newResources = new ArrayList<>();
-        newResources.add(createResource("rel"));
+        newResources.add(createResource("rel", "child"));
         this.subject.setEmbedded(newResources);
         assertEquals(newResources, this.subject.getEmbedded());
         assertNotEquals(resources, this.subject.getEmbedded());
@@ -47,7 +51,7 @@ public class ResourceTest {
     public void testSetEmbedded_GetEmbedded_nonRelResources() throws Exception {
         final List<Resource> resources = new ArrayList<>();
         // create resource with no rel
-        resources.add(createResource());
+        resources.add(factory.createResource("child"));
         this.subject.setEmbedded(resources);
         final List<Resource> actual = this.subject.getEmbedded();
         assertNotNull(actual);
@@ -58,7 +62,7 @@ public class ResourceTest {
     public void testGetEmbeddedString_singleResource() throws Exception {
         // prepare
         final List<Resource> resources = new ArrayList<>();
-        resources.add(createResource("other"));
+        resources.add(createResource("other", "child"));
         // for test preparation we can use the setEmbedded mehtod, in real-life I would have to
         // call embedd(String, Resource)
         this.subject.setEmbedded(resources);
@@ -74,9 +78,9 @@ public class ResourceTest {
     public void testGetEmbeddedString_multipleResources() throws Exception {
         // prepare
         final List<Resource> resources = new ArrayList<>();
-        resources.add(createResource("next"));
-        resources.add(createResource("other"));
-        resources.add(createResource("other"));
+        resources.add(createResource("next", "child"));
+        resources.add(createResource("other", "child"));
+        resources.add(createResource("other", "child"));
         // for test preparation we can use the setEmbedded mehtod, in real-life I would have to
         // call embedd(String, Resource)
         this.subject.setEmbedded(resources);
@@ -104,12 +108,8 @@ public class ResourceTest {
         assertTrue(others.isEmpty());
     }
 
-    private Resource createResource() {
-        return new Resource();
-    }
-
-    private Resource createResource(final String rel) {
-        final Resource res = new Resource();
+    private Resource createResource(final String rel, final String uri) {
+        final Resource res = factory.createResource(uri);
         res.setRel(rel);
         return res;
     }
@@ -117,7 +117,7 @@ public class ResourceTest {
     @Test
     public void testEmbedStringResourceArray_singleResources() throws Exception {
         // prepare
-        final Resource r1 = new Resource();
+        final Resource r1 = new Resource("r1");
         // act
         assertEquals(this.subject, this.subject.embed("next", r1));
         // assert
@@ -132,9 +132,9 @@ public class ResourceTest {
     @Test
     public void testEmbedStringResourceArray_multipleResources() throws Exception {
         // prepare
-        final Resource r1 = new Resource();
-        final Resource r2 = new Resource();
-        final Resource r3 = new Resource();
+        final Resource r1 = new Resource("r1");
+        final Resource r2 = new Resource("r2");
+        final Resource r3 = new Resource("r3");
         // act
         assertEquals(this.subject, this.subject.embed("next", r1));
         assertEquals(this.subject, this.subject.embed("other", r2, r3));
@@ -169,13 +169,13 @@ public class ResourceTest {
     public void testSetLinks_getLinks() throws Exception {
         // initial set
         final List<Link> links = new ArrayList<>();
-        links.add(new Link());
+        links.add(factory.createLink("rel", "href"));
         this.subject.setLinks(links);
         assertEquals(links, this.subject.getLinks());
 
         // link override
         final List<Link> newLinks = new ArrayList<>();
-        newLinks.add(new Link());
+        links.add(factory.createLink("rel", "href"));
         this.subject.setLinks(newLinks);
         assertEquals(newLinks, this.subject.getLinks());
         assertNotEquals(links, this.subject.getLinks());
@@ -191,7 +191,7 @@ public class ResourceTest {
     @Test
     public void testGetLinksString_singleLink() throws Exception {
         final List<Link> newLinks = new ArrayList<>();
-        final Link link = new Link().rel("next").href("http://test.com");
+        final Link link = factory.createLink("next", "http://test.com");
         newLinks.add(link);
         this.subject.setLinks(newLinks);
 
@@ -205,9 +205,9 @@ public class ResourceTest {
     public void testGetLinksString_multipleLink() throws Exception {
         // prepare
         final List<Link> newLinks = new ArrayList<>();
-        final Link link1 = new Link().rel("next").href("http://test.com");
-        final Link link2 = new Link().rel("other").href("http://test2.com");
-        final Link link3 = new Link().rel("other").href("http://test3.com");
+        final Link link1 = factory.createLink("next", "http://test.com");
+        final Link link2 = factory.createLink("other", "http://test2.com");
+        final Link link3 = factory.createLink("other", "http://test3.com");
         newLinks.add(link1);
         newLinks.add(link2);
         newLinks.add(link3);
@@ -231,8 +231,8 @@ public class ResourceTest {
     public void testGetLink_existing() throws Exception {
         // prepare
         final List<Link> newLinks = new ArrayList<>();
-        final Link link1 = new Link().rel("other").name("this");
-        final Link link2 = new Link().rel("other").name("that");
+        final Link link1 = factory.createLink("other", "http://test.com").name("this");
+        final Link link2 = factory.createLink("other", "http://test.com").name("that");
         newLinks.add(link1);
         newLinks.add(link2);
         this.subject.setLinks(newLinks);
@@ -258,8 +258,8 @@ public class ResourceTest {
     @Test
     public void testAddLinkLinkArray() throws Exception {
         // prepare
-        final Link link1 = new Link().rel("other").name("this");
-        final Link link2 = new Link().rel("other").name("that");
+        final Link link1 = factory.createLink("other", "http://test.com").name("this");
+        final Link link2 = factory.createLink("other", "http://test.com").name("that");
 
         // act
         assertEquals(this.subject, this.subject.addLink(link1, link2));
@@ -311,5 +311,25 @@ public class ResourceTest {
         assertEquals(two, this.subject.getLink("other", "two"));
         assertEquals(three, this.subject.getLink("next", "three"));
 
+    }
+
+    @Test
+    public void testGetURI_constructorDefault() throws Exception {
+        final URI uri = this.subject.getURI();
+        assertNotNull(uri);
+        assertEquals("resource", uri.toString());
+    }
+
+    @Test
+    public void testGetURI_derivedBySerializedLink() throws Exception {
+        final Resource res = new Resource();
+        res.addLink("self", "resource");
+        assertEquals("resource", res.getURI().toString());
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testGetURI_noSelfLink() throws Exception {
+        final Resource res = new Resource();
+        res.getURI().toString();
     }
 }

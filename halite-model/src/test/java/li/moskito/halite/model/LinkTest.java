@@ -13,19 +13,17 @@ public class LinkTest {
 
     @Before
     public void setUp() throws Exception {
-        this.subject = new Link();
+        this.subject = new Link("aRel", "aHref");
     }
 
     @Test
     public void testRel() throws Exception {
-        assertEquals(subject, subject.rel("abc"));
-        assertEquals("abc", subject.getRel());
+        assertEquals("aRel", subject.getRel());
     }
 
     @Test
     public void testHref() throws Exception {
-        assertEquals(subject, subject.href("abc"));
-        assertEquals("abc", subject.getHref());
+        assertEquals("aHref", subject.getHref());
     }
 
     @Test
@@ -74,16 +72,16 @@ public class LinkTest {
 
     @Test
     public void testAddTo_oneResource() throws Exception {
-        final Resource r1 = new Resource();
+        final Resource r1 = new Resource("r1");
         assertEquals(subject, subject.addTo(r1));
         assertTrue(r1.getLinks().contains(subject));
     }
 
     @Test
     public void testAddTo_mayResources() throws Exception {
-        final Resource r1 = new Resource();
-        final Resource r2 = new Resource();
-        final Resource r3 = new Resource();
+        final Resource r1 = new Resource("r1");
+        final Resource r2 = new Resource("r2");
+        final Resource r3 = new Resource("r3");
         assertEquals(subject, subject.addTo(r1, r2, r3));
         assertTrue(r1.getLinks().contains(subject));
         assertTrue(r2.getLinks().contains(subject));

@@ -1,5 +1,7 @@
 package li.moskito.halite.model;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,10 +58,40 @@ public class Resource {
      */
     private String rel;
 
-    public Resource() {
+    /**
+     * The uri of the resource
+     */
+    private URI uri;
+
+    /**
+     * The factory to create objects (i.e. links)
+     */
+    private static final ObjectFactory FACTORY = new ObjectFactory();
+
+    /**
+     * Public constructor with URI of the resource itself. A self-relation link is automatically created for the
+     * resource
+     * 
+     * @param uri
+     *            the unique identifier of the resource
+     */
+    public Resource(final String uri) {
+        this();
+        addLink("self", uri);
+        this.uri = toUri(uri);
+    }
+
+    /**
+     * Private constructor for XML Binding
+     */
+    Resource() {
         this.links = new HashMap<String, List<Link>>();
         this.embedded = new HashMap<String, List<Resource>>();
     }
+
+    // TODO add URI to resource which creates a link to self
+    // TODO add representation (json, html) support
+    // TODO add support to create links to other Resource Objects linkTo(Resource)
 
     /**
      * The relation of the resource. The element is optional for top-level resources but required if the resource should
@@ -82,6 +114,38 @@ public class Resource {
      */
     void setRel(final String rel) {
         this.rel = rel;
+    }
+
+    /**
+     * @return the uri
+     */
+    public URI getURI() {
+        if (uri == null) {
+            final Link self = getLink("self");
+            if (self != null) {
+                uri = toUri(self.getHref());
+            } else {
+                throw new IllegalStateException("The resource has no self-related link set");
+            }
+        }
+        return uri;
+    }
+
+    /**
+     * Converts the string to URI
+     * 
+     * @param sUri
+     *            the uri string to be converted to URI
+     * @return
+     * @throws InvalidUriException
+     *             if the URI string is not valid
+     */
+    private URI toUri(final String sUri) {
+        try {
+            return new URI(sUri);
+        } catch (final URISyntaxException e) {
+            throw new InvalidUriException(sUri, e);
+        }
     }
 
     /**
@@ -186,7 +250,7 @@ public class Resource {
      * @param newLinks
      *            the new links to be set
      */
-    public void setLinks(final List<Link> newLinks) {
+    void setLinks(final List<Link> newLinks) {
         this.links.clear();
         addLink(newLinks.toArray(new Link[] {}));
     }
@@ -232,6 +296,29 @@ public class Resource {
     }
 
     /**
+     * Retrieves the link with the specified relation that has no name. If all links of that relation have a name,
+     * <code>null</code> is returned. If there are more than one link with this rel and no name (which should be
+     * avoided) the first match is returned.
+     * 
+     * @param rel
+     *            the relation of the link
+     * @return the link or <code>null</code> if no link was found, or no link with the rel and no name was found.
+     */
+    public Link getLink(final String rel) {
+        assert rel != null : "rel must not be null";
+
+        if (!links.containsKey(rel)) {
+            return null;
+        }
+        for (final Link link : links.get(rel)) {
+            if (link.getName() == null) {
+                return link;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Adds links to the resource.
      * 
      * @param newLink
@@ -262,7 +349,7 @@ public class Resource {
      * 
      */
     public Link addLink(final String rel, final String href) {
-        final Link link = new Link().rel(rel).href(href);
+        final Link link = FACTORY.createLink(rel, href);
         addLink(link);
         return link;
     }

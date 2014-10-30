@@ -64,6 +64,19 @@ public class Link {
     private String title;
 
     /**
+     * package private constructor for JAXB
+     */
+    Link() {
+
+    }
+
+    public Link(final String rel, final String href) {
+        this();
+        this.rel = rel;
+        this.href = href;
+    }
+
+    /**
      * Gets the value of the rel property.
      * 
      * @return possible object is {@link String }
@@ -160,7 +173,7 @@ public class Link {
      *            allowed object is {@link String }
      * @return this link
      */
-    public Link rel(final String value) {
+    Link rel(final String value) {
         this.rel = value;
         return this;
     }
@@ -172,7 +185,7 @@ public class Link {
      *            allowed object is {@link String }
      * @return this link
      */
-    public Link href(final String value) {
+    Link href(final String value) {
         this.href = value;
         return this;
     }
