@@ -29,6 +29,7 @@
 		<sonar.jacoco.reportPath>${coverage.unit.test.path}</sonar.jacoco.reportPath>
 		<sonar.language>java</sonar.language>
 		<jacoco.version>0.7.1.201405082137</jacoco.version>
+		<surefireArgLine />
 	</properties>
 
 	<licenses>
