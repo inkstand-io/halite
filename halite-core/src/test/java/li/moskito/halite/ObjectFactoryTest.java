@@ -39,7 +39,7 @@ public class ObjectFactoryTest {
         final JAXBElement<Resource> jxbRes = subject.createResource(res);
         assertNotNull(jxbRes);
         assertEquals(res, jxbRes.getValue());
-        assertEquals(new QName("http://moskito.li/schemas/halite/v1", "resource"), jxbRes.getName());
+        assertEquals(new QName("http://moskito.li/halite", "resource"), jxbRes.getName());
     }
 
 }

@@ -76,7 +76,7 @@
 				<configuration>
 					<transformSchemas>
 						<transformSchema>
-							<uri>http://moskito.li/schemas/halite/v1</uri>
+							<uri>http://moskito.li/halite</uri>
 							<toPrefix>hal</toPrefix>
 							<toFile>li.moskito.halite.v1.xsd</toFile>
 						</transformSchema>
@@ -98,7 +98,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.outputDirectory}/META-INF/schema</outputDirectory>
+							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${project.build.directory}/generated-resources/schemas</directory>

@@ -25,7 +25,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 class ObjectFactory {
 
-    private static final QName RESOURCE_QNAME = new QName("http://moskito.li/schemas/halite/v1", "resource");
+    private static final QName RESOURCE_QNAME = new QName("http://moskito.li/halite", "resource");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package:
@@ -55,7 +55,7 @@ class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link Resource }{@code >}
      * 
      */
-    @XmlElementDecl(namespace = "http://moskito.li/schemas/halite/v1",
+    @XmlElementDecl(namespace = "http://moskito.li/halite",
             name = "resource")
     public JAXBElement<Resource> createResource(final Resource value) {
         return new JAXBElement<Resource>(RESOURCE_QNAME, Resource.class, null, value);

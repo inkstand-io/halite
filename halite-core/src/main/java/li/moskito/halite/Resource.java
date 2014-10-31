@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlRootElement(name = "resource",
-        namespace = "http://moskito.li/schemas/halite/v1")
+        namespace = "http://moskito.li/halite")
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @XmlType(name = "Resource",
         propOrder = { "embedded", "links" })
@@ -85,7 +85,7 @@ public class Resource {
     /**
      * Private constructor for XML Binding
      */
-    Resource() {
+    protected Resource() {
         this.links = new HashMap<String, List<Link>>();
         this.embedded = new HashMap<String, List<Resource>>();
     }
