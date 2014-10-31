@@ -3,7 +3,8 @@ package li.moskito.halite;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * Standard links according to HAL conventions
+ * The class contains factory methods to create simple Resources and Links and provides a set of standard link
+ * relations.
  * 
  * @author gmuecke
  */

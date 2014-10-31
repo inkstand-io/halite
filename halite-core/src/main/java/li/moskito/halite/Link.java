@@ -70,6 +70,14 @@ public class Link {
 
     }
 
+    /**
+     * Constructor for a Link with the minimum required information 'rel' an 'href'
+     * 
+     * @param rel
+     *            the relation of the link
+     * @param href
+     *            the hyper-reference, the address of the linked resource
+     */
     public Link(final String rel, final String href) {
         this();
         this.rel = rel;

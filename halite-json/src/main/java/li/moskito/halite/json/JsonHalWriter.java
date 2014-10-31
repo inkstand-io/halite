@@ -127,14 +127,36 @@ public class JsonHalWriter {
         this.json.setCodec(new ObjectMapper());
     }
 
+    /**
+     * Constructor for creating a JsonHalWriter on top of an existing {@link JsonGenerator}. Note that, depending on the
+     * CLOSE_ON_WRITE_RESOURCE {@link Option} the generator is closed after a call to write(Object). The default value
+     * for this constructor is NOT to close the stream.
+     * 
+     * @param generator
+     *            the generator to use.
+     */
     public JsonHalWriter(final JsonGenerator generator) {
         this(generator, false);
     }
 
+    /**
+     * Constructor for writing json output directly to the {@link Writer}.
+     * 
+     * @param writer
+     *            the writer to which the json data is written.
+     * @throws IOException
+     */
     public JsonHalWriter(final Writer writer) throws IOException {
         this(FACTORY.createGenerator(writer), true);
     }
 
+    /**
+     * Constructor for writing json output directly to the {@link OutputStream}
+     * 
+     * @param outputStream
+     *            the outputstream to which the data is written
+     * @throws IOException
+     */
     public JsonHalWriter(final OutputStream outputStream) throws IOException {
         this(FACTORY.createGenerator(outputStream), true);
     }
