@@ -168,10 +168,9 @@ public class JsonHalWriter {
      */
     public void writeObjectValue(final Object resource) throws IOException {
 
-        final Class<?> type = resource.getClass();
-        if (Resource.class.isAssignableFrom(type)) {
+        if (resource instanceof Resource) {
             json.writeStartObject();
-            writeResourceValue(resource, type);
+            writeResourceValue(resource, resource.getClass());
             json.writeEndObject();
             json.flush();
         } else {
@@ -181,8 +180,17 @@ public class JsonHalWriter {
 
     }
 
-    private void writeResourceValue(final Object resource, Class<?> type) throws IOException {
+    /**
+     * Writes the body of a {@link Resource} which consists of the _links and the _embedded fields.
+     * 
+     * @param resource
+     *            the resource to write
+     * @param fieldType
+     * @throws IOException
+     */
+    private void writeResourceValue(final Object resource, final Class<?> initialType) throws IOException {
         // render _links and _embedded
+        Class<?> type = initialType;
         writeLinks((Resource) resource);
         writeEmbedded((Resource) resource);
         while (!Resource.class.equals(type)) {
@@ -377,6 +385,15 @@ public class JsonHalWriter {
         json.flush();
     }
 
+    /**
+     * Writes a boolean value (true/false) or null if Write_Nulls is enabled and the value is null.
+     * 
+     * @param name
+     *            the name of the boolean field
+     * @param value
+     *            the boolean field value to be written.
+     * @throws IOException
+     */
     private void writeBoolean(final String name, final Boolean value) throws IOException {
         if (value != null) {
             json.writeBooleanField(name, value);
@@ -385,6 +402,15 @@ public class JsonHalWriter {
         }
     }
 
+    /**
+     * Writes a String value or null if Write_Nulls is enabled and the value is null
+     * 
+     * @param name
+     *            the name of the string field
+     * @param value
+     *            the value of the string field
+     * @throws IOException
+     */
     private void writeString(final String name, final String value) throws IOException {
         if (value != null) {
             json.writeStringField(name, value);
@@ -393,15 +419,37 @@ public class JsonHalWriter {
         }
     }
 
+    /**
+     * Sets an Option for the Writer. See {@link Option} for more information.
+     * 
+     * @param option
+     *            the option to be set
+     * @param value
+     *            the option value
+     */
     public void setOption(final Option option, final Object value) {
         option.validate(value);
         this.options.put(option, value);
     }
 
+    /**
+     * Checks if an option is set.
+     * 
+     * @param option
+     *            the option to check
+     * @return <code>true</code> if the option is set
+     */
     protected boolean isSetOption(final Option option) {
         return this.options.containsKey(option);
     }
 
+    /**
+     * Retrieves the option value
+     * 
+     * @param option
+     *            the option whose value should be retrieved
+     * @return the value of the option
+     */
     protected <T> T getOption(final Option option) {
         // as all default options are set, the get(option) method will always return a non-null value
         return option.value(this.options.get(option));
