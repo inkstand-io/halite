@@ -16,6 +16,7 @@
 			<groupId>xmlunit</groupId>
 			<artifactId>xmlunit</artifactId>
 			<version>1.5</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
