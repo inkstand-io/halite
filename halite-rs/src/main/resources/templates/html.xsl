@@ -96,8 +96,6 @@
 				<xsl:call-template name="submitButton">
 					<xsl:with-param name="elementId" select="$elementId"/>
 					<xsl:with-param name="operation">delete</xsl:with-param>
-					<xsl:with-param name="name">_method</xsl:with-param>
-					<xsl:with-param name="value">delete</xsl:with-param>
 				</xsl:call-template>
 			</li>
 		</xsl:if>
@@ -106,8 +104,6 @@
 				<xsl:call-template name="submitButton">
 					<xsl:with-param name="elementId" select="$elementId"/>
 					<xsl:with-param name="operation">update</xsl:with-param>
-					<xsl:with-param name="name">_method</xsl:with-param>
-					<xsl:with-param name="value">put</xsl:with-param>
 				</xsl:call-template>
 			</li>
 		</xsl:if>
