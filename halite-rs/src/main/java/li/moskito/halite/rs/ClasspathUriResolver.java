@@ -64,7 +64,7 @@ class ClasspathUriResolver implements URIResolver {
                throw new TransformerException("Could access resource " + href, e);
             }
         } else {
-            throw new RuntimeException("Could not resolve resource " + href);
+            throw new TransformerException("Could not resolve resource " + href);
         }
 
     }

@@ -39,7 +39,7 @@ public class ResourceMessageBodyWriterTest {
      */
     private static final Logger LOG = LoggerFactory.getLogger(ResourceMessageBodyWriterTest.class);
 
-    private HaliteMessageBodyWriter<Resource> subject;
+    private ResourceMessageBodyWriter subject;
     private ByteArrayOutputStream outputStream;
 
     private static boolean STRICT_MODE;
@@ -55,6 +55,13 @@ public class ResourceMessageBodyWriterTest {
     public void setUp() throws Exception {
         this.subject = new ResourceMessageBodyWriter();
         this.outputStream = new ByteArrayOutputStream();
+    }
+
+    @Test
+    public void testGetSize() throws Exception {
+        // size is always undeterminable
+        assertEquals(-1, subject.getSize(any(Resource.class), any(Class.class), any(Type.class),
+                any(Annotation[].class), any(MediaType.class)));
     }
 
     @Test

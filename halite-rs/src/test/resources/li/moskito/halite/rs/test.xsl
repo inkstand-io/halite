@@ -6,20 +6,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	exclude-result-prefixes="xsi ibx hal">
 <!--
-Template for testing output transformation of message bodies containing a HAL Resource
+Template for testing handling of invalid templates
  -->
 
-<xsl:template match="//hal:resource">
-<res>
-  	<title>Resource</title>
-  	<links>
-  		<xsl:apply-templates select="link"/>
-  	</links>
-</res>
-</xsl:template>
-
-<xsl:template match="link">
-	<ln relation="{@rel}" hyperreference="{@href}" />
+<xsl:template match@BROKENrel}" hyperreference="{@href}" />
 </xsl:template>
 
 </xsl:stylesheet> 

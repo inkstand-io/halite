@@ -57,7 +57,7 @@ public abstract class OutputTransformMessageBodyWriter extends HaliteMessageBody
 
         } catch (TransformerConfigurationException | TransformerFactoryConfigurationError
                 | ParserConfigurationException e) {
-            throw new RuntimeException("Could not initialize transformer", e);
+            throw new TransformerInitializationException(e);
         }
     }
 
