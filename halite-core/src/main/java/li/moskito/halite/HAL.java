@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * The class contains factory methods to create simple Resources and Links and provides a set of standard link
  * relations.
  * 
- * @author gmuecke
+ * @author Gerald Muecke, gerald@moskito.li
  */
 @XmlTransient
 public final class HAL {

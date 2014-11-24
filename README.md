@@ -6,6 +6,8 @@ Halite allows to extend a basic model formed by a Resource and a Link object usi
 operate on this model to add links or embedd resources. The model object can easily be transformed to xml+hal or 
 json+hal.
 
+Examples
+---------
 ### Create a resource
 ```java
 Resource resource = HAL.newResource("example");
@@ -65,6 +67,12 @@ javax.xml.bind.JAXB.marshall(resource, os);
 ```
 Have a look at the JAXBTest for a running example.
 
-### Outlook
-Support for HTML generation
+ChangeLog
+---------
+- HAL-5 Add Jax-RS support
+- HAL-4 Add (extensible) HTML support
+
+
+Outlook
+--------
 Support for JCR-HAL mapping

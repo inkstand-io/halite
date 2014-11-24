@@ -3,7 +3,7 @@
 
 	<groupId>li.moskito</groupId>
 	<artifactId>halite</artifactId>
-	<version>0.0.15</version>
+	<version>0.1.0</version>
 	<packaging>pom</packaging>
 
 	<name>${project.groupId}:${project.artifactId}</name>
@@ -29,6 +29,11 @@
 		<sonar.jacoco.reportPath>${coverage.unit.test.path}</sonar.jacoco.reportPath>
 		<sonar.language>java</sonar.language>
 		<jacoco.version>0.7.1.201405082137</jacoco.version>
+		
+		<!-- javax Versions -->
+		<javax.javaee-api.version>7.0</javax.javaee-api.version>
+		<javax.ws.rs-api.version>2.0.1</javax.ws.rs-api.version>
+		<jboss.resteasy.version>3.0.10.Final</jboss.resteasy.version>
 	</properties>
 
 	<licenses>
@@ -280,5 +285,6 @@
 		<module>halite-core</module>
 		<module>halite-json</module>
 		<module>halite-xml</module>
+		<module>halite-rs</module>
 	</modules>
 </project>
