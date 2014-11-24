@@ -1,7 +1,6 @@
 package li.moskito.halite.rs;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathEvaluatesTo;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -9,9 +8,9 @@ import static org.mockito.Matchers.any;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.net.URL;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -20,7 +19,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import li.moskito.halite.HAL;
 import li.moskito.halite.Resource;
-import li.moskito.halite.rs.OutputTransformMessageBodyWriter;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +35,7 @@ public class OutputTransformMessageBodyWriterTest {
     private static final Logger LOG = LoggerFactory.getLogger(OutputTransformMessageBodyWriterTest.class);
 
     private OutputTransformMessageBodyWriter subject;
-    private InputStream templateStream;
+    private URL templateURL;
     private ByteArrayOutputStream outputStream;
 
     @Before
@@ -46,8 +44,8 @@ public class OutputTransformMessageBodyWriterTest {
         this.subject = new OutputTransformMessageBodyWriter() {
 
             @Override
-            protected InputStream getTemplate() {
-                return templateStream;
+            protected URL getTemplate() {
+                return templateURL;
             }
         };
         this.outputStream = new ByteArrayOutputStream();
@@ -92,7 +90,7 @@ public class OutputTransformMessageBodyWriterTest {
     @Test
     public void testWriteTo_templateTransformation()
             throws Exception {
-        this.templateStream = OutputTransformMessageBodyWriterTest.class.getResourceAsStream("test.xsl");
+        this.templateURL = OutputTransformMessageBodyWriterTest.class.getResource("test.xsl");
         // call init to create the transformer
         this.subject.initializeTransformer();
         final Resource resource = HAL.newResource("test");

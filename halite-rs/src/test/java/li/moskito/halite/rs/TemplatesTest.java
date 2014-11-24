@@ -15,12 +15,12 @@ import org.junit.Test;
 
 public class TemplatesTest {
 
-    private ClasspathUriResolver uriResolver;
+    private ClasspathURIResolver uriResolver;
     private TransformerFactory factory;
 
     @Before
     public void setUp() throws ParserConfigurationException {
-        this.uriResolver = new ClasspathUriResolver("/templates/");
+        this.uriResolver = new ClasspathURIResolver("/templates/");
         this.factory = TransformerFactory.newInstance();
         this.factory.setURIResolver(this.uriResolver);
     }

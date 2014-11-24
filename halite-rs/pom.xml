@@ -7,7 +7,8 @@
 		<version>0.0.16-SNAPSHOT</version>
 	</parent>
 	<artifactId>halite-rs</artifactId>
-	<description>Extension for Restful services</description>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>Extension for Jax-RS services to generate different representations of halite Resources.</description>
 
 	<dependencies>
 		<dependency>
@@ -28,17 +29,6 @@
 			<version>${javax.javaee-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>li.moskito</groupId>
-			<artifactId>halite-core</artifactId>
-			<version>0.0.16-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>li.moskito</groupId>
-			<artifactId>halite-json</artifactId>
-			<version>0.0.16-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>xmlunit</groupId>
 			<artifactId>xmlunit</artifactId>
@@ -50,6 +40,17 @@
 			<artifactId>jsonassert</artifactId>
 			<version>1.2.3</version>
 			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>li.moskito</groupId>
+			<artifactId>halite-core</artifactId>
+			<version>0.0.16-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>li.moskito</groupId>
+			<artifactId>halite-json</artifactId>
+			<version>0.0.16-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

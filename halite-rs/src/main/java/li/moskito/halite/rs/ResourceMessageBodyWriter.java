@@ -14,7 +14,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 import li.moskito.halite.Resource;
@@ -23,7 +22,7 @@ import li.moskito.halite.json.JsonHalWriter;
 /**
  * JaxRS {@link MessageBodyWriter} to write {@link Resource} instances either as JSon or as XML.
  * 
- * @author gmuecke
+ * @author Gerald Muecke, gerald@moskito.li
  * 
  */
 @Provider

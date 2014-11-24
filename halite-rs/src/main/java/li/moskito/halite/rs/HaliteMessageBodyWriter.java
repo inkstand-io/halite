@@ -12,6 +12,13 @@ import javax.xml.bind.JAXBException;
 
 import li.moskito.halite.Resource;
 
+/**
+ * {@link MessageBodyWriter} to write halite {@link Resource}s in a JAX-RS service response.
+ *  
+ * @author Gerald Muecke, gerald@moskito.li
+ *
+ * @param <R> type of the {@link Resource} to write
+ */
 public abstract class HaliteMessageBodyWriter<R extends Resource> implements MessageBodyWriter<R> {
 
     private String compiledPackageList;
@@ -25,7 +32,6 @@ public abstract class HaliteMessageBodyWriter<R extends Resource> implements Mes
         return -1;
     }
 
-
     /**
      * Override this method to provide a set of {@link MediaType}s that this {@link MessageBodyWriter} will
      * produce. This set is evaluated in teh isWriteable method. The default list is empty and therefore
@@ -36,7 +42,6 @@ public abstract class HaliteMessageBodyWriter<R extends Resource> implements Mes
     protected Collection<MediaType> getSupportedMediaTypes(){
         return Collections.emptyList();
     }
-
     
     /**
      * Checks if the type parameter is a {@link Resource}

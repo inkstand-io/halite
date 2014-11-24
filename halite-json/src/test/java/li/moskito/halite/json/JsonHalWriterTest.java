@@ -614,7 +614,7 @@ public class JsonHalWriterTest {
     /**
      * A Simple POJO used for testsing serialization of objects
      * 
-     * @author gmuecke
+     * @author Gerald Muecke, gerald@moskito.li
      * 
      */
     public static class SimplePojo {
@@ -652,7 +652,7 @@ public class JsonHalWriterTest {
     /**
      * A Simple POJO used for testsing serialization of objects
      * 
-     * @author gmuecke
+     * @author Gerald Muecke, gerald@moskito.li
      * 
      */
     @XmlType
@@ -694,7 +694,7 @@ public class JsonHalWriterTest {
     /**
      * A POJO extending a resource, used for testsing serialization of objects
      * 
-     * @author gmuecke
+     * @author Gerald Muecke, gerald@moskito.li
      * 
      */
     public static class ResourcePojo extends Resource {
@@ -773,7 +773,7 @@ public class JsonHalWriterTest {
     /**
      * A POJO extending a resource with a collection field
      * 
-     * @author gmuecke
+     * @author Gerald Muecke, gerald@moskito.li
      * 
      */
     public static class ListPojo extends Resource {

@@ -8,23 +8,23 @@ import javax.xml.transform.TransformerException;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ClasspathUriResolverTest {
+public class ClasspathURIResolverTest {
 
-    private ClasspathUriResolver subject;
+    private ClasspathURIResolver subject;
     @Before
     public void setUp() throws Exception {
-        this.subject = new ClasspathUriResolver();
+        this.subject = new ClasspathURIResolver();
     }
 
     @Test
     public void testClasspathUriResolver() throws Exception {
-        ClasspathUriResolver cur = new ClasspathUriResolver();
+        ClasspathURIResolver cur = new ClasspathURIResolver();
         assertNotNull(cur.resolve("li/moskito/halite/rs/test.xsl"));
     }
 
     @Test
     public void testClasspathUriResolverString() throws Exception {
-        ClasspathUriResolver cur = new ClasspathUriResolver("/li/moskito/halite/rs/");
+        ClasspathURIResolver cur = new ClasspathURIResolver("/li/moskito/halite/rs/");
         assertNotNull(cur.resolve("test.xsl"));
     }
 
