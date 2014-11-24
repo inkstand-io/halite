@@ -3,7 +3,7 @@
 
 	<groupId>li.moskito</groupId>
 	<artifactId>halite</artifactId>
-	<version>0.0.16-SNAPSHOT</version>
+	<version>0.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>${project.groupId}:${project.artifactId}</name>
