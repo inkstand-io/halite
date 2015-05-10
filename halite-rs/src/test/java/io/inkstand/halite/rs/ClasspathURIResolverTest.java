@@ -24,7 +24,7 @@ public class ClasspathURIResolverTest {
 
     @Test
     public void testClasspathUriResolverString() throws Exception {
-        ClasspathURIResolver cur = new ClasspathURIResolver("/li/moskito/halite/rs/");
+        ClasspathURIResolver cur = new ClasspathURIResolver("/io/inkstand/halite/rs/");
         assertNotNull(cur.resolve("test.xsl"));
     }
 

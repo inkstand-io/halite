@@ -11,7 +11,7 @@ import javax.xml.transform.stream.StreamSource;
 
 /**
  * Resolver to resolve URI resources inside the classpath.
- * @author Gerald Muecke, gerald@moskito.li
+ * @author <a href="mailto:gerald.muecke@gmail.com">Gerald M&uuml;cke</a>
  *
  */
 public class ClasspathURIResolver implements URIResolver {

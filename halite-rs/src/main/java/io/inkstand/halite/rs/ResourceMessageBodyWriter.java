@@ -22,7 +22,7 @@ import io.inkstand.halite.json.JsonHalWriter;
 /**
  * JaxRS {@link MessageBodyWriter} to write {@link Resource} instances either as JSon or as XML.
  * 
- * @author Gerald Muecke, gerald@moskito.li
+ * @author <a href="mailto:gerald.muecke@gmail.com">Gerald M&uuml;cke</a>
  * 
  */
 @Provider

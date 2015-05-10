@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>li.moskito</groupId>
+	<groupId>io.inkstand</groupId>
 	<artifactId>halite</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -52,9 +52,9 @@
 	<developers>
 		<developer>
 			<name>Gerald Muecke</name>
-			<email>gerald@moskito.li</email>
-			<organization>Moskito.li</organization>
-			<organizationUrl>https://github.com/moskitoli/halite</organizationUrl>
+			<email>gerald.muecke@gmail.com</email>
+			<organization>inkstand.io</organization>
+			<organizationUrl>https://inkstand.io/halite</organizationUrl>
 		</developer>
 	</developers>
 
@@ -94,7 +94,7 @@
 						<configuration>
 							<skip>${skipTests}</skip>
 							<includes>
-								<include>li.moskito.halite.*</include>
+								<include>io.inkstand.halite.*</include>
 							</includes>
 						</configuration>
 						<executions>

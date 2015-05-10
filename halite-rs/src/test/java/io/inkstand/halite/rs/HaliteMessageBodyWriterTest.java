@@ -1,8 +1,15 @@
 package io.inkstand.halite.rs;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
@@ -10,13 +17,7 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.xml.bind.JAXBException;
-
 import io.inkstand.halite.Resource;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,7 +46,7 @@ public class HaliteMessageBodyWriterTest {
             
             @Override
             protected Collection<String> getCustomModelPackages() {
-                return Arrays.asList("li.moskito");
+                return Arrays.asList("io.inkstand");
             }
             
             @Override

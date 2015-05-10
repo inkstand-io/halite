@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlRootElement(name = "resource",
-        namespace = "http://moskito.li/halite")
+        namespace = "http://inkstand.io/halite")
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @XmlType(name = "Resource",
         propOrder = { "embedded", "links" })

@@ -12,7 +12,7 @@ import io.inkstand.halite.Resource;
 /**
  * {@link MessageBodyWriter} for writing halite {@link Resource}s as HTML using XSLTransformation.
  * 
- * @author Gerald Muecke, gerald@moskito.li
+ * @author <a href="mailto:gerald.muecke@gmail.com">Gerald M&uuml;cke</a>
  *
  */
 @Provider

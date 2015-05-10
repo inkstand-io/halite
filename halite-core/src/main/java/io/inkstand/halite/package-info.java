@@ -27,6 +27,6 @@
  * HAL.newLink(&quot;home&quot;, &quot;http://...&quot;).title("Home").addTo(r1, r2, r3);
  * </pre>
  */
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://moskito.li/halite")
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://inkstand.io/halite")
 package io.inkstand.halite;
 

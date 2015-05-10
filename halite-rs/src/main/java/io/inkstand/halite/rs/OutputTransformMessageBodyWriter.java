@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * {@link MessageBodyWriter} that allows to transform the halite {@link Resource} to any representation using an
  * XSL transformation.
  * 
- * @author Gerald Muecke, gerald@moskito.li
+ * @author <a href="mailto:gerald.muecke@gmail.com">Gerald M&uuml;cke</a>
  *
  */
 public abstract class OutputTransformMessageBodyWriter extends HaliteMessageBodyWriter<Resource> {

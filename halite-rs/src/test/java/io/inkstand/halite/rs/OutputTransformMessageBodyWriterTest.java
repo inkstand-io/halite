@@ -5,6 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -12,14 +16,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.net.URL;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import io.inkstand.halite.HAL;
 import io.inkstand.halite.Resource;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -90,16 +88,20 @@ public class OutputTransformMessageBodyWriterTest {
     @Test
     public void testWriteTo_templateTransformation()
             throws Exception {
+
+        //prepare
         this.templateURL = OutputTransformMessageBodyWriterTest.class.getResource("test.xsl");
         // call init to create the transformer
         this.subject.initializeTransformer();
         final Resource resource = HAL.newResource("test");
+
+        //act
         this.subject.writeTo(resource, any(Class.class), any(Type.class), any(Annotation[].class),
                 any(MediaType.class), any(MultivaluedMap.class), outputStream);
 
+        // assert
         final Document document = getDocument();
 
-        // assert
         assertXpathEvaluatesTo("Resource", "/res/title", document);
         assertXpathEvaluatesTo("self", "/res/links/ln/@relation", document);
         assertXpathEvaluatesTo("test", "/res/links/ln[@relation='self']/@hyperreference", document);

@@ -1,21 +1,20 @@
 package io.inkstand.halite.rs;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.Collections;
-
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Collections;
 
 import io.inkstand.halite.Resource;
 
 /**
  * {@link MessageBodyWriter} to write halite {@link Resource}s in a JAX-RS service response.
  *  
- * @author Gerald Muecke, gerald@moskito.li
+ * @author <a href="mailto:gerald.muecke@gmail.com">Gerald M&uuml;cke</a>
  *
  * @param <R> type of the {@link Resource} to write
  */
@@ -89,7 +88,7 @@ public abstract class HaliteMessageBodyWriter<R extends Resource> implements Mes
         if(compiledPackageList == null) {
             StringBuilder buf = new StringBuilder(64);
             //add mandatory package
-            buf.append("li.moskito.halite");
+            buf.append("io.inkstand.halite");
             for(String customPackage: getCustomModelPackages()){
                 buf.append(':').append(customPackage);
             }

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * fields and further renders the fields of potential JAXB classes that extend the {@link Resource}. <br>
  * Note: The implementation is not thread safe. Use a separate writer per thread.
  * 
- * @author Gerald Muecke, gerald@moskito.li
+ * @author <a href="mailto:gerald.muecke@gmail.com">Gerald M&uuml;cke</a>
  * 
  */
 @SuppressWarnings("unchecked")
@@ -35,7 +35,7 @@ public class JsonHalWriter {
     /**
      * Options to configure the writer
      * 
-     * @author Gerald Muecke, gerald@moskito.li
+     * @author <a href="mailto:gerald.muecke@gmail.com">Gerald M&uuml;cke</a>
      * 
      */
     public static enum Option {

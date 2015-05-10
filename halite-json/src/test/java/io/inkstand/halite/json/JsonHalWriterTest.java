@@ -3,19 +3,19 @@ package io.inkstand.halite.json;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
-
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 import io.inkstand.halite.HAL;
 import io.inkstand.halite.Link;
 import io.inkstand.halite.Resource;
-
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -25,9 +25,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class JsonHalWriterTest {
@@ -613,7 +610,7 @@ public class JsonHalWriterTest {
     /**
      * A Simple POJO used for testsing serialization of objects
      * 
-     * @author Gerald Muecke, gerald@moskito.li
+     * @author <a href="mailto:gerald.muecke@gmail.com">Gerald M&uuml;cke</a>
      * 
      */
     public static class SimplePojo {
@@ -651,7 +648,7 @@ public class JsonHalWriterTest {
     /**
      * A Simple POJO used for testsing serialization of objects
      * 
-     * @author Gerald Muecke, gerald@moskito.li
+     * @author <a href="mailto:gerald.muecke@gmail.com">Gerald M&uuml;cke</a>
      * 
      */
     @XmlType
@@ -693,7 +690,7 @@ public class JsonHalWriterTest {
     /**
      * A POJO extending a resource, used for testsing serialization of objects
      * 
-     * @author Gerald Muecke, gerald@moskito.li
+     * @author <a href="mailto:gerald.muecke@gmail.com">Gerald M&uuml;cke</a>
      * 
      */
     public static class ResourcePojo extends Resource {
@@ -772,7 +769,7 @@ public class JsonHalWriterTest {
     /**
      * A POJO extending a resource with a collection field
      * 
-     * @author Gerald Muecke, gerald@moskito.li
+     * @author <a href="mailto:gerald.muecke@gmail.com">Gerald M&uuml;cke</a>
      * 
      */
     public static class ListPojo extends Resource {
