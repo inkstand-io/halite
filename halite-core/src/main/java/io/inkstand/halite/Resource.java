@@ -137,8 +137,6 @@ public class Resource {
      * @param sUri
      *            the uri string to be converted to URI
      * @return
-     * @throws InvalidUriException
-     *             if the URI string is not valid
      */
     private URI toUri(final String sUri) {
         try {
@@ -188,7 +186,7 @@ public class Resource {
     /**
      * Clears the links of the resource and replaces them with the list of links
      * 
-     * @param newLinks
+     * @param newResources
      *            the new links to be set
      */
     void setEmbedded(final List<Resource> newResources) {
