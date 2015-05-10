@@ -16,3 +16,5 @@ halite-model/.settings/
 halite-core/.settings/
 .settings/
 target/
+*.iml
+.idea/

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<hal:resource xmlns:hal="http://inkstand.io/schemas/halite/v1">
+    <embedded rel="other"/>
+    <link rel="self" href="http://test.com" name="aName" type="aType" title="aTitle"/>
+</hal:resource>
